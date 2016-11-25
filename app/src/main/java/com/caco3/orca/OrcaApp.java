@@ -5,9 +5,15 @@ import android.content.Context;
 
 import java.util.Objects;
 
+import timber.log.Timber;
+
 
 public class OrcaApp extends Application {
 
+    @Override
+    public void onCreate(){
+        Timber.plant(new Timber.DebugTree());
+    }
     /**
      * Static method returns {@link OrcaApp} instance from context
      * @param context to get {@link OrcaApp}
