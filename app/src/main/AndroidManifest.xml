@@ -9,6 +9,17 @@
         android:theme="@style/AppTheme"
         android:name=".OrcaApp">
 
+        <!-- splash activity -->
+        <activity
+            android:name=".ui.SplashActivity"
+            android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>
