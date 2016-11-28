@@ -4,24 +4,22 @@ import com.caco3.orca.orioks.model.OrioksResponse;
 
 import java.io.IOException;
 
+import rx.Observable;
+
 public interface Orioks {
 
     /**
      * Returns a {@link OrioksResponse} for current semester
-     * @return {@link OrioksResponse}
-     * @throws LoginOrPasswordIncorrectException {@link UserCredentials} are incorrect
-     * @throws IOException if any i/o error occurred
+     * @param credentials to get response with
+     * @return {@link OrioksResponse}'s{@link Observable}
      */
-    OrioksResponse getResponseForCurrentSemester()
-            throws LoginOrPasswordIncorrectException, IOException;
+    Observable<OrioksResponse> getResponseForCurrentSemester(UserCredentials credentials);
 
     /**
      * Returns a {@link OrioksResponse} for specified semester
-     * @return {@link OrioksResponse}
+     * @return {@link OrioksResponse}'s {@link Observable}
+     * @param credentials to get response with
      * @param semester to get response for
-     * @throws LoginOrPasswordIncorrectException {@link UserCredentials} are incorrect
-     * @throws IOException if any i/o error occurred
      */
-    OrioksResponse getResponse(int semester)
-            throws LoginOrPasswordIncorrectException, IOException;
+    Observable<OrioksResponse> getResponse(UserCredentials credentials, int semester);
 }
