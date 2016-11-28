@@ -3,6 +3,8 @@ package com.caco3.orca.ui;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.caco3.orca.login.LoginActivity;
+
 /**
  * Launcher activity of this app.
  * Shows splash screen and then starts another activity
@@ -11,7 +13,7 @@ import android.os.Bundle;
  */
 public class SplashActivity extends BaseActivity {
     private static final Class<? extends BaseActivity> NEXT_ACTIVITY
-            = null; // TODO: 11/25/16 Specify next activity
+            = LoginActivity.class; // TODO: 11/25/16 Specify next activity
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
