@@ -5,4 +5,16 @@
     <string name="nav_drawer_open">Open navigation drawer</string>
     <string name="nav_drawer_close">Close navigation drawer</string>
     <string name="nav_learning_title">Learning</string>
+
+    <string name="network_error_occurred">Network error occurred. Check your connection</string>
+
+    <!-- Strings related to log in activity -->
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="sign_in">Sign in</string>
+    <string name="login_cannot_be_empty_string">Login cannot be empty string</string>
+    <string name="password_cannot_be_empty_string">Password cannot be empty string</string>
+    <string name="signing_in">Signing in</string>
+    <string name="login_or_password_incorrect">Login or password incorrect</string>
+
 </resources>
