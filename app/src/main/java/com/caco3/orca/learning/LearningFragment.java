@@ -74,6 +74,8 @@ public class LearningFragment extends Fragment
                 .build()
                 .inject(this);
 
+        presenter.onViewAttached(this);
+
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -106,7 +108,8 @@ public class LearningFragment extends Fragment
                     public void onClick(View v) {
                         presenter.onReLogInRequest();
                     }
-                });
+                })
+                .show();
     }
 
     @Override
