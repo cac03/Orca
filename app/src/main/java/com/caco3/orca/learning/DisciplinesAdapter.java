@@ -99,9 +99,9 @@ import butterknife.ButterKnife;
             float percentage = discipline.getTotalAchievedPoints() / discipline.getTotalAvailablePoints();
 
             int bgColorId;
-            if (percentage < 50) {
+            if (percentage < .50) {
                 bgColorId = android.R.color.holo_red_dark;
-            } else if (percentage <= 75) {
+            } else if (percentage <= .75) {
                 bgColorId = android.R.color.holo_orange_light;
             } else {
                 bgColorId = android.R.color.holo_green_dark;
