@@ -11,7 +11,7 @@ import dagger.Provides;
  * Custom dagger module for {@link CredentialsManager}
  */
 @Module
-public final class CredentialsModule {
+public class CredentialsModule {
 
     @Provides
     @Singleton
