@@ -49,9 +49,18 @@ public final class ControlEvent implements Serializable {
      */
     private boolean hasSeenNewEnteredPoints = true;
 
+    /**
+     * True if points for this control event are entered
+     * and this control event must be considered when calculating
+     * discipline points where this event attached.
+     *
+     * False otherwise.
+     */
+    private boolean isEntered;
+
     private static final long serialVersionUID = -85465588452256L;
 
-    private ControlEvent(float achievedPoints, float maxAvailablePoints, Teacher enteredBy, int week, String typeName, String topic, boolean hasSeenNewEnteredPoints) {
+    private ControlEvent(float achievedPoints, float maxAvailablePoints, Teacher enteredBy, int week, String typeName, String topic, boolean hasSeenNewEnteredPoints, boolean isEntered) {
         this.achievedPoints = achievedPoints;
         this.maxAvailablePoints = maxAvailablePoints;
         this.enteredBy = enteredBy;
@@ -59,6 +68,7 @@ public final class ControlEvent implements Serializable {
         this.typeName = typeName;
         this.topic = topic;
         this.hasSeenNewEnteredPoints = hasSeenNewEnteredPoints;
+        this.isEntered = isEntered;
     }
 
     private ControlEvent(Builder builder) {
@@ -68,7 +78,8 @@ public final class ControlEvent implements Serializable {
                 builder.week,
                 builder.typeName,
                 builder.topic,
-                builder.hasSeenNewEnteredPoints);
+                builder.hasSeenNewEnteredPoints,
+                builder.entered);
 
     }
 
@@ -104,7 +115,15 @@ public final class ControlEvent implements Serializable {
         return topic;
     }
 
-    public boolean isHasSeenNewEnteredPoints() {
+    public boolean isEntered() {
+        return isEntered;
+    }
+
+    public void setEntered(boolean entered) {
+        isEntered = entered;
+    }
+
+    public boolean hasSeenNewEnteredPoints() {
         return hasSeenNewEnteredPoints;
     }
 
@@ -151,6 +170,7 @@ public final class ControlEvent implements Serializable {
         private String typeName;
         private String topic;
         private boolean hasSeenNewEnteredPoints;
+        private boolean entered;
 
         public Builder achievedPoints(float achievedPoints) {
             this.achievedPoints = achievedPoints;
@@ -185,6 +205,11 @@ public final class ControlEvent implements Serializable {
 
         public Builder hasSeen(boolean seen) {
             this.hasSeenNewEnteredPoints = seen;
+            return this;
+        }
+
+        public Builder entered(boolean entered){
+            this.entered = entered;
             return this;
         }
 
