@@ -21,4 +21,9 @@ public interface CredentialsManager {
      * @return saved current credentials or <code>null</code> if no credentials saved
      */
     UserCredentials getCurrentCredentials();
+
+    /**
+     * Removes current credentials from persistent storage
+     */
+    void removeCurrentCredentials();
 }
