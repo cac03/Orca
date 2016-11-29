@@ -15,7 +15,7 @@ public class CredentialsModule {
 
     @Provides
     @Singleton
-    /*package*/ CredentialsManager provideCredentialsManager(Context context) {
+    public CredentialsManager provideCredentialsManager(Context context) {
         return new CredentialsManagerPreferencesImpl(context);
     }
 }
