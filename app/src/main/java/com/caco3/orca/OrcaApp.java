@@ -4,9 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.caco3.orca.credentials.CredentialsModule;
 import com.caco3.orca.orioks.OrioksModule;
-
-import java.util.Objects;
 
 import timber.log.Timber;
 
@@ -40,7 +39,8 @@ public class OrcaApp extends Application {
      */
     protected DaggerApplicationComponent.Builder prepareApplicationComponent(){
         return DaggerApplicationComponent.builder()
-                .orioksModule(new OrioksModule());
+                .orioksModule(new OrioksModule())
+                .credentialsModule(new CredentialsModule());
     }
 
     @NonNull
