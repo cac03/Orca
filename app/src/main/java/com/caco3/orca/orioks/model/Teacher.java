@@ -3,11 +3,13 @@ package com.caco3.orca.orioks.model;
 
 import com.caco3.orca.util.Preconditions;
 
+import java.io.Serializable;
+
 /**
  * Represents a model of teacher.
  * Immutable
  */
-public final class Teacher {
+public final class Teacher implements Serializable {
 
     // not null
     private final String firstName;
@@ -15,6 +17,8 @@ public final class Teacher {
     private final String lastName;
     // nullable
     private final String patronymic;
+
+    private static final long serialVersionUID = -8865589548664552L;
 
     public Teacher(String firstName, String lastName, String patronymic) {
         this.firstName = Preconditions.checkNotNull(firstName);
