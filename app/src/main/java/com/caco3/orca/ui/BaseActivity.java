@@ -1,5 +1,6 @@
 package com.caco3.orca.ui;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
@@ -16,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.caco3.orca.R;
+import com.caco3.orca.learning.LearningActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -132,7 +134,8 @@ public abstract class BaseActivity extends AppCompatActivity {
                     if (item.getItemId() != getNavDrawerItemId()) {
                         switch (item.getItemId()){
                             case R.id.nav_learning:
-                                // TODO: 11/25/16 navigate to learning activity
+                                startActivity(new Intent(BaseActivity.this, LearningActivity.class));
+                                finish();
                                 break;
                         }
                     }
