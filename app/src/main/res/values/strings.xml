@@ -17,4 +17,7 @@
     <string name="signing_in">Signing in</string>
     <string name="login_or_password_incorrect">Login or password incorrect</string>
 
+    <!-- Strings related to learning activity -->
+    <string name="reenter_login_and_password">Re-enter</string>
+
 </resources>
