@@ -141,16 +141,16 @@ public abstract class BaseActivity extends AppCompatActivity {
                         drawerLayout.closeDrawers();
                     }
 
-                    // if no parent activity, show hamburger icon in toolbar
-                    drawerToggle.setDrawerIndicatorEnabled(!hasParentActivity());
-
-                    if (getNavDrawerItemId() != NAV_DRAWER_NO_ITEM) {
-                        navigationView.getMenu().findItem(getNavDrawerItemId()).setChecked(true);
-                    }
 
                     return true;
                 }
             });
+            // if no parent activity, show hamburger icon in toolbar
+            drawerToggle.setDrawerIndicatorEnabled(!hasParentActivity());
+
+            if (getNavDrawerItemId() != NAV_DRAWER_NO_ITEM) {
+                navigationView.getMenu().findItem(getNavDrawerItemId()).setChecked(true);
+            }
         }
     }
 
