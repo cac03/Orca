@@ -30,5 +30,12 @@ public class LearningActivity extends BaseActivity {
                 .beginTransaction()
                 .replace(R.id.fragment_container, fragment, FRAGMENT_TAG)
                 .commitNow();
+
+        setTitle(R.string.nav_learning_title);
+    }
+
+    @Override
+    protected int getNavDrawerItemId() {
+        return R.id.nav_learning;
     }
 }
