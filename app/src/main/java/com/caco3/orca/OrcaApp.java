@@ -40,7 +40,8 @@ public class OrcaApp extends Application {
     protected DaggerApplicationComponent.Builder prepareApplicationComponent(){
         return DaggerApplicationComponent.builder()
                 .orioksModule(new OrioksModule())
-                .credentialsModule(new CredentialsModule());
+                .credentialsModule(new CredentialsModule())
+                .applicationModule(new ApplicationModule(this));
     }
 
     @NonNull
