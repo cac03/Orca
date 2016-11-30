@@ -1,8 +1,6 @@
 package com.caco3.orca.login;
 
 
-import android.support.annotation.NonNull;
-
 import com.caco3.orca.credentials.CredentialsManager;
 import com.caco3.orca.orioks.LoginOrPasswordIncorrectException;
 import com.caco3.orca.orioks.Orioks;
@@ -34,9 +32,8 @@ import timber.log.Timber;
 
     /**
      * Orioks api.
-     * Will be injected
+     * Will be injected in c-tor
      */
-    @NonNull
     private Orioks orioks;
 
     // not null, will be injected in c-tor
