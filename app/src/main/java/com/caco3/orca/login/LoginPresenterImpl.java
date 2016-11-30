@@ -15,7 +15,6 @@ import javax.inject.Inject;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.exceptions.Exceptions;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
@@ -39,6 +38,11 @@ import timber.log.Timber;
     // not null, will be injected in c-tor
     private CredentialsManager credentialsManager;
 
+    /**
+     * Keep reference to subscription so we are able to tell whether we're performing login operation
+     */
+    private Subscription loginSubscription;
+
     @Inject
     /*package*/ LoginPresenterImpl(Orioks orioks, CredentialsManager credentialsManager){
         Timber.d("New instance");
@@ -50,6 +54,12 @@ import timber.log.Timber;
     public void onViewAttached(LoginView view) {
         Timber.d("onViewAttached()");
         this.view = view;
+        /**
+         * We were performing signing in. So we have to show progress
+         */
+        if (loginSubscription != null) {
+            view.showProgress();
+        }
     }
 
     @Override
@@ -85,7 +95,7 @@ import timber.log.Timber;
             }
 
             final UserCredentials credentials = new UserCredentials(login, password);
-            orioks.getResponseForCurrentSemester(credentials)
+            loginSubscription = orioks.getResponseForCurrentSemester(credentials)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe(new Subscriber<OrioksResponse>() {
@@ -112,6 +122,8 @@ import timber.log.Timber;
                             if (view != null) {
                                 view.hideProgress();
                             }
+
+                            loginSubscription = null;
                         }
 
                         @Override
@@ -126,6 +138,8 @@ import timber.log.Timber;
                                 view.hideProgress();
                                 view.navigateToLearningActivity();
                             }
+
+                            loginSubscription = null;
                         }
                     });
         }
