@@ -12,6 +12,8 @@ import com.caco3.orca.R;
 import com.caco3.orca.orioks.model.Discipline;
 import com.caco3.orca.util.Preconditions;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
 
@@ -87,6 +89,8 @@ import butterknife.ButterKnife;
         @BindView(R.id.discipline_points)
         TextView disciplinePoints;
 
+        private final NumberFormat numberFormat = new DecimalFormat("#.###");
+
         /*package*/ ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -94,21 +98,35 @@ import butterknife.ButterKnife;
 
         /*package*/ void bind(Discipline discipline) {
             disciplineName.setText(discipline.getName());
-            disciplinePoints.setText(String.format(Locale.getDefault(), "%.1f", discipline.getTotalAchievedPoints()));
 
-            float percentage = discipline.getTotalAchievedPoints() / discipline.getTotalAvailablePoints();
-
-            int bgColorId;
-            if (percentage < .50) {
-                bgColorId = android.R.color.holo_red_dark;
-            } else if (percentage <= .75) {
-                bgColorId = android.R.color.holo_orange_light;
+            float achievedPoints = discipline.getTotalAchievedPoints();
+            float availablePoints = discipline.getTotalAvailablePoints();
+            String pointsText;
+            int pointsBgColorId;
+            if (Float.compare(availablePoints, 0.0f) == 0) {
+                // no points earned
+                pointsBgColorId = android.R.color.darker_gray;
+                pointsText = "-";
             } else {
-                bgColorId = android.R.color.holo_green_dark;
+                float percentage = discipline.getTotalAchievedPoints() / discipline.getTotalAvailablePoints();
+
+                if (percentage < .50) {
+                    pointsBgColorId = R.color.red;
+                } else if (percentage < .75) {
+                    pointsBgColorId = R.color.yellow;
+                } else if (percentage < .85) {
+                    pointsBgColorId = R.color.green;
+                } else {
+                    pointsBgColorId = R.color.brightGreen;
+                }
+
+                pointsText = numberFormat.format(achievedPoints);
+
             }
+            disciplinePoints.setText(pointsText);
 
             disciplinePoints.setBackgroundColor(ResourcesCompat
-                    .getColor(context.getResources(), bgColorId, null));
+                    .getColor(context.getResources(), pointsBgColorId, null));
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
