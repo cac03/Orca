@@ -3,6 +3,7 @@ package com.caco3.orca.login;
 
 import android.support.annotation.NonNull;
 
+import com.caco3.orca.credentials.CredentialsManager;
 import com.caco3.orca.orioks.LoginOrPasswordIncorrectException;
 import com.caco3.orca.orioks.Orioks;
 import com.caco3.orca.orioks.UserCredentials;
@@ -38,10 +39,14 @@ import timber.log.Timber;
     @NonNull
     private Orioks orioks;
 
+    // not null, will be injected in c-tor
+    private CredentialsManager credentialsManager;
+
     @Inject
-    /*package*/ LoginPresenterImpl(Orioks orioks){
+    /*package*/ LoginPresenterImpl(Orioks orioks, CredentialsManager credentialsManager){
         Timber.d("New instance");
         this.orioks = Preconditions.checkNotNull(orioks);
+        this.credentialsManager = Preconditions.checkNotNull(credentialsManager);
     }
 
     @Override
@@ -82,7 +87,7 @@ import timber.log.Timber;
                 view.showProgress();
             }
 
-            UserCredentials credentials = new UserCredentials(login, password);
+            final UserCredentials credentials = new UserCredentials(login, password);
             orioks.getResponseForCurrentSemester(credentials)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
@@ -115,6 +120,10 @@ import timber.log.Timber;
                         @Override
                         public void onNext(OrioksResponse orioksResponse) {
                             Timber.i("Successfully receiver orioks response. Processing");
+
+                            // save credentials
+                            credentialsManager.setCurrentCredentials(credentials);
+
                             // TODO: 11/28/16 process response
                             if (view != null) {
                                 view.hideProgress();
