@@ -81,6 +81,14 @@ public class LoginFragment extends Fragment implements LoginView {
     @Override
     public void onDestroyView() {
         presenter.onViewDetached();
+
+        /**
+         * It will be shown by presenter when view will be reattached
+         */
+        if (signingInDialog != null) {
+            hideProgress();
+        }
+
         super.onDestroyView();
     }
 
