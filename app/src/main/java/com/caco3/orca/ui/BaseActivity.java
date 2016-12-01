@@ -18,6 +18,7 @@ import android.view.MenuItem;
 
 import com.caco3.orca.R;
 import com.caco3.orca.learning.LearningActivity;
+import com.caco3.orca.schedule.ScheduleActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -135,6 +136,10 @@ public abstract class BaseActivity extends AppCompatActivity {
                         switch (item.getItemId()){
                             case R.id.nav_learning:
                                 startActivity(new Intent(BaseActivity.this, LearningActivity.class));
+                                finish();
+                                break;
+                            case R.id.nav_schedule:
+                                startActivity(new Intent(BaseActivity.this, ScheduleActivity.class));
                                 finish();
                                 break;
                         }

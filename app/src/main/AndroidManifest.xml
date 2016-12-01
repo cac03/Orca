@@ -22,6 +22,8 @@
         <activity android:name=".login.LoginActivity"
             android:theme="@style/AppTheme.Dark"/>
         <activity android:name=".learning.LearningActivity" />
+
+        <activity android:name=".schedule.ScheduleActivity" />
     </application>
 
 </manifest>
