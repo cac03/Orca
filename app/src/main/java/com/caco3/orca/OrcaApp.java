@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 
 import com.caco3.orca.credentials.CredentialsModule;
 import com.caco3.orca.orioks.OrioksModule;
+import com.caco3.orca.scheduleapi.ScheduleApiModule;
 
 import timber.log.Timber;
 
@@ -41,7 +42,8 @@ public class OrcaApp extends Application {
         return DaggerApplicationComponent.builder()
                 .orioksModule(new OrioksModule())
                 .credentialsModule(new CredentialsModule())
-                .applicationModule(new ApplicationModule(this));
+                .applicationModule(new ApplicationModule(this))
+                .scheduleApiModule(new ScheduleApiModule());
     }
 
     @NonNull
