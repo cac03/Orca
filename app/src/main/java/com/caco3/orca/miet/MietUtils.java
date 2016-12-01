@@ -38,6 +38,13 @@ public class MietUtils {
         endOfAutumnSemester = (Calendar)startOfAutumnSemester.clone();
         endOfAutumnSemester.add(Calendar.WEEK_OF_YEAR, WEEKS_PER_SEMESTER);
         endOfAutumnSemester.set(Calendar.HOUR_OF_DAY, 24);
+        Calendar newYear = Calendar.getInstance();
+        newYear.set(Calendar.MONTH, Calendar.DECEMBER);
+        newYear.set(Calendar.DAY_OF_MONTH, 31);
+        if (endOfAutumnSemester.compareTo(newYear) > 0) {
+            endOfAutumnSemester.set(Calendar.MONTH, Calendar.DECEMBER);
+            endOfAutumnSemester.set(Calendar.DAY_OF_MONTH, 31);
+        }
 
         startOfSpringSemester = Calendar.getInstance();
         startOfSpringSemester.set(Calendar.MONTH, Calendar.FEBRUARY);
