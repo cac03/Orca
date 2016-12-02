@@ -2,6 +2,8 @@ package com.caco3.orca.data.schedule;
 
 import com.caco3.orca.scheduleapi.ScheduleItem;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -32,4 +34,18 @@ public interface ScheduleRepository {
      * @param groupName to remove repository for
      */
     void removeSchedule(String groupName);
+
+    /**
+     * Saves a collection of group names schedule for is available in {@link com.caco3.orca.scheduleapi.ScheduleApi}
+     * @param collection string collection
+     */
+    void saveGroupNames(Collection<String> collection);
+
+    /**
+     * Returns list of group names already saved with {@link #saveGroupNames(Collection)} schedule
+     * for is available via {@link com.caco3.orca.scheduleapi.ScheduleApi}
+     * @return List of strings sorted by natural order or <code>null</code> if there
+     * were no group names saved with {@link #saveGroupNames(Collection)}
+     */
+    List<String> getGroupNames();
 }

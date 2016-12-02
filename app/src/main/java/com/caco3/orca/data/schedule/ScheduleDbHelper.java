@@ -79,4 +79,23 @@ import android.database.sqlite.SQLiteOpenHelper;
         }
 
     }
+
+    /*package*/ static class Groups {
+        /*package*/ static final String TABLE_NAME = "groups";
+        /**Integer, primary key*/
+        /*package*/ static final String KEY__ID = "_id";
+        /**Text*/
+        /*package*/ static final String KEY_GROUP_NAME = "name";
+        private static void onCreate(SQLiteDatabase db) {
+            db.execSQL("CREATE TABLE " + TABLE_NAME + " ("
+                    + KEY__ID + " INTEGER PRIMARY KEY, "
+                    + KEY_GROUP_NAME + " TEXT"
+                    + ")");
+        }
+
+        private static void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+            db.execSQL("DROP TABLE " + TABLE_NAME + " IF EXISTS;");
+            onCreate(db);
+        }
+    }
 }

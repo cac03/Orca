@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.caco3.orca.scheduleapi.ScheduleItem;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -200,5 +201,84 @@ import timber.log.Timber;
                 .physicalEducation(c.getInt(isPhysicalEducationIdx) == 1)
                 .militaryLesson(c.getInt(isMilitaryLessonIdx) == 1)
                 .build();
+    }
+
+    @Override
+    public void saveGroupNames(Collection<String> collection) {
+        SQLiteDatabase db = null;
+
+        Timber.i("Going to save collection of group names to db");
+        try {
+            db = new ScheduleDbHelper(context).getWritableDatabase();
+
+            db.beginTransaction();
+            Timber.i("Transaction began");
+
+            for(String groupName : collection) {
+                ContentValues cv = new ContentValues(1);
+                cv.put(ScheduleDbHelper.Groups.KEY_GROUP_NAME, groupName);
+                db.insert(ScheduleDbHelper.Groups.TABLE_NAME, null, cv);
+            }
+
+            db.setTransactionSuccessful();
+            Timber.i("Transaction successful");
+        } finally {
+            if (db != null) {
+                db.endTransaction();
+                db.close();
+            }
+        }
+    }
+
+    @Override
+    public List<String> getGroupNames() {
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        Timber.i("Going to get group names from db");
+        try {
+            db = new ScheduleDbHelper(context).getReadableDatabase();
+
+            String[] columns = new String[]{ScheduleDbHelper.Groups.KEY_GROUP_NAME};
+            String orderBy = ScheduleDbHelper.Groups.KEY_GROUP_NAME;
+            cursor = db.query(ScheduleDbHelper.Groups.TABLE_NAME,
+                    columns,
+                    null, // selection
+                    null, // selection args
+                    null, // group by
+                    null, // having
+                    orderBy);
+
+            Timber.i("Queried");
+
+            if (cursor != null) {
+                Timber.i("Available: %d", cursor.getCount());
+                if (cursor.getCount() == 0) {
+                    /**
+                     * No items saved. We have to return null according to {@link ScheduleRepository}
+                     * contract
+                     */
+                    return null;
+                } else {
+                    int nameIdx = cursor.getColumnIndexOrThrow(ScheduleDbHelper.Groups.KEY_GROUP_NAME);
+                    List<String> result = new ArrayList<>(250/* approximately number of groups */ );
+                    while (cursor.moveToNext()) {
+                        result.add(cursor.getString(nameIdx));
+                    }
+
+                    return result;
+                }
+            } else {
+                return null;
+            }
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            if (db != null) {
+                db.close();
+            }
+        }
     }
 }
