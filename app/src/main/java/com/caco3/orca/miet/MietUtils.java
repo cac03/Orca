@@ -1,7 +1,9 @@
 package com.caco3.orca.miet;
 
-
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Contains some useful constants and methods which help to work with dates
@@ -28,6 +30,41 @@ public class MietUtils {
      * Calendar with date set to the end of spring semester
      */
     private static final Calendar endOfSpringSemester;
+
+    /**
+     * Begin, end lesson time lists declaration.
+     *
+     * @see #BEGIN_LESSON_HOURS_OF_DAY
+     * @see #BEGIN_LESSON_MINUTES_OF_HOUR
+     * @see #END_LESSON_HOURS_OF_DAY
+     * @see #END_LESSON_MINUTES_OF_HOUR
+     * Combining all of them we can get begin and (hour, minute) time of any lesson in range
+     * 1 - 7, but since arrays are zero-based, to get begin hour of first lesson we must use 0 index
+     */
+    /**
+     * Hours of lessons begin time in order. First lesson starts at 9'th hour of day
+     */
+    public static final List<Integer> BEGIN_LESSON_HOURS_OF_DAY
+            = Collections.unmodifiableList(Arrays.asList(9, 10, 12, 14, 16, 18, 19));
+
+    /**
+     * Minutes of lesson begin time in order. First lesson starts at 0 minute of hour.
+     */
+    public static final List<Integer> BEGIN_LESSON_MINUTES_OF_HOUR
+            = Collections.unmodifiableList(Arrays.asList(0, 40, 20, 20, 0, 10, 50));
+
+    /**
+     * Hours of lessons end time in order. First lesson ends at 10'th hour of day
+     */
+    public static final List<Integer> END_LESSON_HOURS_OF_DAY
+            = Collections.unmodifiableList(Arrays.asList(10, 12, 13, 15, 17, 19, 21));
+
+    /**
+     * Minutes of lesson end time in order. First lesson ends at 30'th minute of hour
+     */
+    public static final List<Integer> END_LESSON_MINUTES_OF_HOUR
+            = Collections.unmodifiableList(Arrays.asList(30, 10, 50, 50, 30, 40, 20));
+
 
     static {
         startOfAutumnSemester = Calendar.getInstance();

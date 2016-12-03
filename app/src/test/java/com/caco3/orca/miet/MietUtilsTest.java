@@ -46,4 +46,32 @@ public class MietUtilsTest {
 
         assertTrue(MietUtils.belongsToAutumnSemester(calendar));
     }
+
+    @Test
+    public void sizesOfLessonBeginEndTimeListsAreEqual(){
+        int size = MietUtils.BEGIN_LESSON_HOURS_OF_DAY.size();
+        assertEquals(MietUtils.BEGIN_LESSON_MINUTES_OF_HOUR.size(), size);
+        assertEquals(MietUtils.END_LESSON_HOURS_OF_DAY.size(), size);
+        assertEquals(MietUtils.END_LESSON_MINUTES_OF_HOUR.size(), size);
+    }
+
+    @Test
+    public void firstLessonStartAt900Am() {
+        Calendar firstLesson = Calendar.getInstance();
+        firstLesson.set(Calendar.HOUR_OF_DAY, MietUtils.BEGIN_LESSON_HOURS_OF_DAY.get(0));
+        firstLesson.set(Calendar.MINUTE, MietUtils.BEGIN_LESSON_MINUTES_OF_HOUR.get(0));
+
+        assertEquals(9, firstLesson.get(Calendar.HOUR_OF_DAY));
+        assertEquals(0, firstLesson.get(Calendar.MINUTE));
+    }
+
+    @Test
+    public void fourthLessonEndsAt350Pm(){
+        Calendar fourthLesson = Calendar.getInstance();
+        fourthLesson.set(Calendar.HOUR_OF_DAY, MietUtils.END_LESSON_HOURS_OF_DAY.get(3));
+        fourthLesson.set(Calendar.MINUTE, MietUtils.END_LESSON_MINUTES_OF_HOUR.get(3));
+
+        assertEquals(15, fourthLesson.get(Calendar.HOUR_OF_DAY));
+        assertEquals(50, fourthLesson.get(Calendar.MINUTE));
+    }
 }
