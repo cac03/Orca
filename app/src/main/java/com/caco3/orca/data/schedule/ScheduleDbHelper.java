@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 /*package*/final class ScheduleDbHelper extends SQLiteOpenHelper  {
 
     private static final String DATABASE_NAME = "schedule.db";
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 3;
 
     /*package*/ ScheduleDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DB_VERSION);
@@ -17,11 +17,13 @@ import android.database.sqlite.SQLiteOpenHelper;
     @Override
     public void onCreate(SQLiteDatabase db) {
         ScheduleItems.onCreate(db);
+        Groups.onCreate(db);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         ScheduleItems.onUpgrade(db, oldVersion, newVersion);
+        Groups.onUpgrade(db, oldVersion, newVersion);
     }
 
     /**
@@ -74,7 +76,7 @@ import android.database.sqlite.SQLiteOpenHelper;
         }
 
         private static void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            db.execSQL("DROP TABLE " + TABLE_NAME + " IF EXISTS;");
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
             onCreate(db);
         }
 
@@ -94,7 +96,7 @@ import android.database.sqlite.SQLiteOpenHelper;
         }
 
         private static void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            db.execSQL("DROP TABLE " + TABLE_NAME + " IF EXISTS;");
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
             onCreate(db);
         }
     }
