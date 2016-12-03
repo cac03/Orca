@@ -48,30 +48,58 @@ public class MietUtilsTest {
     }
 
     @Test
-    public void sizesOfLessonBeginEndTimeListsAreEqual(){
-        int size = MietUtils.BEGIN_LESSON_HOURS_OF_DAY.size();
-        assertEquals(MietUtils.BEGIN_LESSON_MINUTES_OF_HOUR.size(), size);
-        assertEquals(MietUtils.END_LESSON_HOURS_OF_DAY.size(), size);
-        assertEquals(MietUtils.END_LESSON_MINUTES_OF_HOUR.size(), size);
+    public void firstLessonEndsAt1030am(){
+        Calendar calendar = Calendar.getInstance();
+        long millis = MietUtils.getLessonEndTime(calendar, 1);
+        calendar.setTimeInMillis(millis);
+
+        assertEquals(10, calendar.get(Calendar.HOUR_OF_DAY));
+        assertEquals(30, calendar.get(Calendar.MINUTE));
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void npeThrownWhenNullProvided(){
+        MietUtils.getLessonEndTime(null, 9);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void iaeThrownWhenNegativeNumberProvided(){
+        MietUtils.getLessonEndTime(Calendar.getInstance(), -1);
     }
 
     @Test
-    public void firstLessonStartAt900Am() {
-        Calendar firstLesson = Calendar.getInstance();
-        firstLesson.set(Calendar.HOUR_OF_DAY, MietUtils.BEGIN_LESSON_HOURS_OF_DAY.get(0));
-        firstLesson.set(Calendar.MINUTE, MietUtils.BEGIN_LESSON_MINUTES_OF_HOUR.get(0));
+    public void firstLessonStartsAt900Am(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(MietUtils.getLessonBeginTime(calendar, 1));
 
-        assertEquals(9, firstLesson.get(Calendar.HOUR_OF_DAY));
-        assertEquals(0, firstLesson.get(Calendar.MINUTE));
+        assertEquals(9, calendar.get(Calendar.HOUR_OF_DAY));
+        assertEquals(0, calendar.get(Calendar.MINUTE));
     }
 
     @Test
-    public void fourthLessonEndsAt350Pm(){
-        Calendar fourthLesson = Calendar.getInstance();
-        fourthLesson.set(Calendar.HOUR_OF_DAY, MietUtils.END_LESSON_HOURS_OF_DAY.get(3));
-        fourthLesson.set(Calendar.MINUTE, MietUtils.END_LESSON_MINUTES_OF_HOUR.get(3));
+    public void eighthLessonStartsAt930Pm(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(MietUtils.getLessonBeginTime(calendar, 8));
 
-        assertEquals(15, fourthLesson.get(Calendar.HOUR_OF_DAY));
-        assertEquals(50, fourthLesson.get(Calendar.MINUTE));
+        assertEquals(9 + 12, calendar.get(Calendar.HOUR_OF_DAY));
+        assertEquals(30, calendar.get(Calendar.MINUTE));
+    }
+
+    @Test
+    public void firstLessonEndsAt1030Am(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(MietUtils.getLessonEndTime(calendar, 1));
+
+        assertEquals(10, calendar.get(Calendar.HOUR_OF_DAY));
+        assertEquals(30, calendar.get(Calendar.MINUTE));
+    }
+
+    @Test
+    public void eighthLessonEndsAt1100Pm(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(MietUtils.getLessonEndTime(calendar, 8));
+
+        assertEquals(11 + 12, calendar.get(Calendar.HOUR_OF_DAY));
+        assertEquals(0, calendar.get(Calendar.MINUTE));
     }
 }

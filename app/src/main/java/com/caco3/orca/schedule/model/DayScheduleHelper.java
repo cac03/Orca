@@ -61,21 +61,9 @@ public class DayScheduleHelper {
 
             for(ScheduleItem scheduleItem : scheduleItems) {
                 if (scheduleItem.takesPlaceAt(iterableCalendar)) {
-                    Calendar lessonBegin = (Calendar)iterableCalendar.clone();
-                    lessonBegin.set(Calendar.HOUR_OF_DAY, MietUtils.BEGIN_LESSON_HOURS_OF_DAY
-                            .get(scheduleItem.getOrderInDay() - 1));
-                    lessonBegin.set(Calendar.MINUTE, MietUtils.BEGIN_LESSON_MINUTES_OF_HOUR
-                            .get(scheduleItem.getOrderInDay() - 1));
-
-                    Calendar lessonEnd = (Calendar)iterableCalendar.clone();
-                    lessonEnd.set(Calendar.HOUR_OF_DAY, MietUtils.END_LESSON_HOURS_OF_DAY
-                            .get(scheduleItem.getOrderInDay() - 1));
-                    lessonEnd.set(Calendar.MINUTE, MietUtils.END_LESSON_MINUTES_OF_HOUR
-                            .get(scheduleItem.getOrderInDay() - 1));
-
                     Lesson lesson = new Lesson(scheduleItem.getDisciplineName(),
-                            lessonBegin.getTimeInMillis(),
-                            lessonEnd.getTimeInMillis(),
+                            MietUtils.getLessonBeginTime(iterableCalendar, scheduleItem.getOrderInDay()),
+                            MietUtils.getLessonEndTime(iterableCalendar, scheduleItem.getOrderInDay()),
                             scheduleItem.getClassroom(),
                             scheduleItem.getTeacherName(),
                             scheduleItem.getOrderInDay(),
@@ -95,21 +83,9 @@ public class DayScheduleHelper {
                 // or there is no lessons between two any
                 // insert null
                 if (lessons.get(j).getOrderInDay() != j + 1) {
-                    Calendar lessonBegin = (Calendar)iterableCalendar.clone();
-                    lessonBegin.set(Calendar.HOUR_OF_DAY, MietUtils.BEGIN_LESSON_HOURS_OF_DAY
-                            .get(j));
-                    lessonBegin.set(Calendar.MINUTE, MietUtils.BEGIN_LESSON_MINUTES_OF_HOUR
-                            .get(j));
-
-                    Calendar lessonEnd = (Calendar)iterableCalendar.clone();
-                    lessonEnd.set(Calendar.HOUR_OF_DAY, MietUtils.END_LESSON_HOURS_OF_DAY
-                            .get(j));
-                    lessonEnd.set(Calendar.MINUTE, MietUtils.END_LESSON_MINUTES_OF_HOUR
-                            .get(j));
-
                     lessons.add(j, Lesson.noLesson(j + 1,
-                            lessonBegin.getTimeInMillis(),
-                            lessonEnd.getTimeInMillis()));
+                            MietUtils.getLessonBeginTime(iterableCalendar, j + 1),
+                            MietUtils.getLessonEndTime(iterableCalendar, j + 1)));
                 }
             }
 

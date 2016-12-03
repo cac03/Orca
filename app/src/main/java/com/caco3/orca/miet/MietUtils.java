@@ -1,5 +1,7 @@
 package com.caco3.orca.miet;
 
+import com.caco3.orca.util.Preconditions;
+
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
@@ -13,6 +15,16 @@ public class MietUtils {
      * Weeks per each semester
      */
     private static final int WEEKS_PER_SEMESTER = 18;
+
+    /**
+     * Length of one lesson in minutes
+     */
+    private static final int LESSON_LENGTH_MINUTES = 90;
+
+    /**
+     * Length of break between lessons in minutes
+     */
+    private static final int BREAK_LENGTH_MINUTES = 10;
 
     /**
      * Calendar with date set to the start of autumn semester
@@ -44,25 +56,25 @@ public class MietUtils {
     /**
      * Hours of lessons begin time in order. First lesson starts at 9'th hour of day
      */
-    public static final List<Integer> BEGIN_LESSON_HOURS_OF_DAY
+    private static final List<Integer> BEGIN_LESSON_HOURS_OF_DAY
             = Collections.unmodifiableList(Arrays.asList(9, 10, 12, 14, 16, 18, 19));
 
     /**
      * Minutes of lesson begin time in order. First lesson starts at 0 minute of hour.
      */
-    public static final List<Integer> BEGIN_LESSON_MINUTES_OF_HOUR
+    private static final List<Integer> BEGIN_LESSON_MINUTES_OF_HOUR
             = Collections.unmodifiableList(Arrays.asList(0, 40, 20, 20, 0, 10, 50));
 
     /**
      * Hours of lessons end time in order. First lesson ends at 10'th hour of day
      */
-    public static final List<Integer> END_LESSON_HOURS_OF_DAY
+    private static final List<Integer> END_LESSON_HOURS_OF_DAY
             = Collections.unmodifiableList(Arrays.asList(10, 12, 13, 15, 17, 19, 21));
 
     /**
      * Minutes of lesson end time in order. First lesson ends at 30'th minute of hour
      */
-    public static final List<Integer> END_LESSON_MINUTES_OF_HOUR
+    private static final List<Integer> END_LESSON_MINUTES_OF_HOUR
             = Collections.unmodifiableList(Arrays.asList(30, 10, 50, 50, 30, 40, 20));
 
 
@@ -146,5 +158,98 @@ public class MietUtils {
      */
     private MietUtils(){
         throw new AssertionError("No instances");
+    }
+
+    /**
+     * Returns millis since epoch when a lesson with provided ordinal number begins,
+     * it just takes year, and day of year from provided calendar and then sets hour
+     * and minutes of lesson beginning for provided lesson's ordinal number
+     * @param calendar with set day and year
+     * @param ordinal ordinal number of lesson. 1 based
+     * @return millis since epoch with set hour and minute for lesson with provided ordinal number
+     *
+     * @throws NullPointerException if <code>calendar == null</code>
+     * @throws IllegalArgumentException if <code>ordinal <= 0</code>
+     */
+    public static long getLessonBeginTime(Calendar calendar, int ordinal) {
+        Preconditions.checkNotNull(calendar);
+        /**
+         * We don't want to modify arguments
+         */
+        calendar = (Calendar)calendar.clone();
+        if (ordinal <= 0){
+            throw new IllegalArgumentException("ordinal < 0. ordinal = " + ordinal);
+        }
+
+        if (ordinal - 1 < BEGIN_LESSON_HOURS_OF_DAY.size()) {
+            // just set pre calculated values
+            calendar.set(Calendar.HOUR_OF_DAY, BEGIN_LESSON_HOURS_OF_DAY.get(ordinal - 1));
+            calendar.set(Calendar.MINUTE, BEGIN_LESSON_MINUTES_OF_HOUR.get(ordinal - 1));
+        } else {
+            calendar.set(Calendar.HOUR_OF_DAY, BEGIN_LESSON_HOURS_OF_DAY.get(BEGIN_LESSON_HOURS_OF_DAY.size() - 1));
+            calendar.set(Calendar.MINUTE, BEGIN_LESSON_MINUTES_OF_HOUR.get(BEGIN_LESSON_HOURS_OF_DAY.size() - 1));
+            int toAdd = (ordinal - BEGIN_LESSON_HOURS_OF_DAY.size())
+                    * (LESSON_LENGTH_MINUTES + BREAK_LENGTH_MINUTES);
+
+            calendar.add(Calendar.MINUTE, toAdd);
+        }
+
+        return calendar.getTimeInMillis();
+    }
+
+    /**
+     * Same as {@link #getLessonBeginTime(Calendar, int)}, but instead of {@link Calendar} accepts long
+     * millis since epoch
+     */
+    public static long getLessonBeginTime(long millis, int ordinal) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(millis);
+        return getLessonBeginTime(calendar, ordinal);
+    }
+
+    /**
+     * Returns time in millis since epoch when lesson ends, year and date values are taken from provided
+     * <code>calendar</code>, hour and minutes are calculated.
+     * @param calendar calendar with set year and day, not null
+     * @param ordinal ordinal number of lesson in day. 1-based
+     * @return time in millis since epoch
+     *
+     * @throws NullPointerException if <code>calendar == null</code>
+     * @throws IllegalArgumentException if <code>ordinal <= 0</code>
+     */
+    public static long getLessonEndTime(Calendar calendar, int ordinal) {
+        Preconditions.checkNotNull(calendar, "calendar == null");
+        if (ordinal <= 0) {
+            throw new IllegalArgumentException("ordinal <= 0, ordinal = " + ordinal);
+        }
+        /**
+         * Don't modify arguments
+         */
+        calendar = (Calendar) calendar.clone();
+
+        if (ordinal - 1 < END_LESSON_HOURS_OF_DAY.size()) {
+            // just return pre calculated values
+            calendar.set(Calendar.HOUR_OF_DAY, END_LESSON_HOURS_OF_DAY.get(ordinal - 1));
+            calendar.set(Calendar.MINUTE, END_LESSON_MINUTES_OF_HOUR.get(ordinal - 1));
+        } else {
+            // need to calculate
+            calendar.set(Calendar.HOUR_OF_DAY, END_LESSON_HOURS_OF_DAY.get(BEGIN_LESSON_HOURS_OF_DAY.size() - 1));
+            calendar.set(Calendar.MINUTE, END_LESSON_MINUTES_OF_HOUR.get(BEGIN_LESSON_HOURS_OF_DAY.size() - 1));
+            int toAdd = (ordinal - BEGIN_LESSON_HOURS_OF_DAY.size())
+                    * (LESSON_LENGTH_MINUTES + BREAK_LENGTH_MINUTES);
+
+            calendar.add(Calendar.MINUTE, toAdd);
+        }
+
+        return calendar.getTimeInMillis();
+    }
+
+    /**
+     * Same as {@link #getLessonEndTime(Calendar, int)}, but instead of Calendar accepts millis since epoch
+     */
+    public static long getLessonEndTime(long millis, int ordinal) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(millis);
+        return getLessonEndTime(calendar, ordinal);
     }
 }
