@@ -12,19 +12,19 @@ import java.util.List;
      * When this view run for the first time, we try to predict the group the app user studies in,
      * if we couldn't do it, we must notify him about it and suggest to select it manually
      */
-    void showCouldntPredictGroupErrorView();
+    void showCouldNotPredictGroupErrorView();
 
     /**
      * Called when an error occurred while we were trying to load group names
      * schedule for is available
      */
-    void showCouldntLoadGroupsErrorView();
+    void showCouldNotLoadGroupsErrorView();
 
     /**
      * Called when we were unable to load schedule for group because of i/o error or.. parse error
      * @param groupName we couldn't load schedule for
      */
-    void showCouldntGetScheduleErrorView(String groupName);
+    void showCouldNotGetScheduleErrorView(String groupName);
 
     /**
      * Shows schedule view for group name
