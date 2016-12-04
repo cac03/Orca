@@ -24,8 +24,11 @@ public class ResponseAdapter {
          * raw response we will search it here and if found merge them
          * @see ScheduleItem.Builder#areSameExceptRepeats(ScheduleItem.Builder)
          * @see ScheduleItem.Builder#mergeByRepeats(ScheduleItem.Builder)
+         *
+         * Also there are duplicates which differ only by {@link RoomInternal#name} it's not fixed.
+         * We take only one of these duplicates todo: fix it
          */
-        Set<ScheduleItem.Builder> uniqueBuilders = new HashSet<>();
+        Set<ScheduleItem.Builder> uniqueExceptClassroomBuilders = new HashSet<>();
 
         if (responseInternal.scheduleItems != null) { // ANYTHING can happen
 
@@ -115,7 +118,7 @@ public class ResponseAdapter {
 
 
                     boolean foundSame = false;
-                    for (ScheduleItem.Builder unique : uniqueBuilders) {
+                    for (ScheduleItem.Builder unique : uniqueExceptClassroomBuilders) {
                         // no need duplicates
                         if (unique.areSameExceptRepeats(builder)) {
                             unique.mergeByRepeats(builder);
@@ -125,7 +128,7 @@ public class ResponseAdapter {
                     }
 
                     if (!foundSame) {
-                        uniqueBuilders.add(builder);
+                        uniqueExceptClassroomBuilders.add(builder);
                     }
                 } else {
                     // this raw item is invalid. Just log
@@ -137,6 +140,21 @@ public class ResponseAdapter {
         } else {
             // responseInternal.scheduleItems == null
             System.err.println("responseInternal.scheduleItems == null");
+        }
+
+
+        Set<ScheduleItem.Builder> uniqueBuilders = new HashSet<>();
+        for (ScheduleItem.Builder b : uniqueExceptClassroomBuilders) {
+            boolean foundSame = false;
+            for(ScheduleItem.Builder builder : uniqueBuilders) {
+                if (builder.areSameExceptClassroom(b)) {
+                    foundSame = true;
+                }
+            }
+
+            if (!foundSame) {
+                uniqueBuilders.add(b);
+            }
         }
 
         Set<ScheduleItem> result = new HashSet<>();

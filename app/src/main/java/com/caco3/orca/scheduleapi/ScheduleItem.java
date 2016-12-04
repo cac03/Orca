@@ -359,6 +359,31 @@ public final class ScheduleItem implements Serializable {
             }
         }
 
+        /**
+         * Internal method used in {@link ResponseAdapter}.
+         * It compares to builders by all fields except {@link #classroom}
+         * @param that builder to compare with
+         * @return true if all fields are same except {@link #classroom}
+         */
+        /*package*/ boolean areSameExceptClassroom(Builder that) {
+            if (dayOfWeek != that.dayOfWeek) return false;
+            if (orderInDay != that.orderInDay) return false;
+            if (repeatsEveryFirstWeekOfMonth != that.repeatsEveryFirstWeekOfMonth) return false;
+            if (repeatsEverySecondWeekOfMonth != that.repeatsEverySecondWeekOfMonth)
+                return false;
+            if (repeatsEveryThirdWeekOfMonth != that.repeatsEveryThirdWeekOfMonth) return false;
+            if (repeatsEveryFourthWeekOfMonth != that.repeatsEveryFourthWeekOfMonth)
+                return false;
+            if (isLecture != that.isLecture) return false;
+            if (isSeminar != that.isSeminar) return false;
+            if (isLaboratoryWork != that.isLaboratoryWork) return false;
+            if (physicalEducation != that.physicalEducation) return false;
+            if (militaryLesson != that.militaryLesson) return false;
+            if (disciplineName != null ? !disciplineName.equals(that.disciplineName) : that.disciplineName != null)
+                return false;
+            return teacherName != null ? teacherName.equals(that.teacherName) : that.teacherName == null;
+        }
+
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
