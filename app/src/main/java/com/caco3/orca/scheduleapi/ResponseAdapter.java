@@ -1,8 +1,11 @@
 package com.caco3.orca.scheduleapi;
 
+import com.caco3.orca.BuildConfig;
+
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * This class adapts non-convenient raw {@link ScheduleApiResponseInternal} to other convenient objects
@@ -15,21 +18,8 @@ public class ResponseAdapter {
      * @return set of schedule items
      */
     public static Set<ScheduleItem> adapt(ScheduleApiResponseInternal responseInternal) {
-        /**
-         * There are duplicates in raw response which differ only {@link ScheduleItemInternal#dayNumber}
-         * (0 - repeats first week, 1 - every second ...)
-         * We don't want duplicates in result.
-         * So we will merge them:
-         * We will keep all 'unique' builders in this set, and when we will get another one from
-         * raw response we will search it here and if found merge them
-         * @see ScheduleItem.Builder#areSameExceptRepeats(ScheduleItem.Builder)
-         * @see ScheduleItem.Builder#mergeByRepeats(ScheduleItem.Builder)
-         *
-         * Also there are duplicates which differ only by {@link RoomInternal#name} it's not fixed.
-         * We take only one of these duplicates todo: fix it
-         */
-        Set<ScheduleItem.Builder> uniqueExceptClassroomBuilders = new HashSet<>();
-
+        // Create builder for each scheduleItems from raw item and collect them into set
+        Set<ScheduleItem.Builder> asScheduleItemBuilders = new HashSet<>();
         if (responseInternal.scheduleItems != null) { // ANYTHING can happen
 
             for (ScheduleItemInternal scheduleItemInternal : responseInternal.scheduleItems) {
@@ -116,20 +106,7 @@ public class ResponseAdapter {
                             .physicalEducation(physicalEducation)
                             .militaryLesson(militaryLesson);
 
-
-                    boolean foundSame = false;
-                    for (ScheduleItem.Builder unique : uniqueExceptClassroomBuilders) {
-                        // no need duplicates
-                        if (unique.areSameExceptRepeats(builder)) {
-                            unique.mergeByRepeats(builder);
-                            foundSame = true;
-                            break;
-                        }
-                    }
-
-                    if (!foundSame) {
-                        uniqueExceptClassroomBuilders.add(builder);
-                    }
+                    asScheduleItemBuilders.add(builder);
                 } else {
                     // this raw item is invalid. Just log
                     System.err.println("Provided scheduleItemInternal is invalid");
@@ -142,24 +119,66 @@ public class ResponseAdapter {
             System.err.println("responseInternal.scheduleItems == null");
         }
 
+        Set<ScheduleItem.Builder> mergedByDisciplineAndClassroom = new HashSet<>(asScheduleItemBuilders);
+        for (ScheduleItem.Builder outer : asScheduleItemBuilders) {
+            for (ScheduleItem.Builder inner : asScheduleItemBuilders) {
+                if (outer != inner) {
+                    if (outer.takePlaceAtSameTime(inner)) {
+                        // they take place at the same time
+                        if (outer.getDisciplineName().equals(inner.getDisciplineName())) {
+                            // two classrooms for same discipline name
+                            // merge classroom string
+                            ScheduleItem.Builder merged = outer.clone();
+                            if (outer.getClassroom().compareTo(inner.getClassroom()) < 0) {
+                                merged.classroom(outer.getClassroom() + "/" + inner.getClassroom());
+                            } else {
+                                merged.classroom(inner.getClassroom() + "/" + outer.getClassroom());
+                            }
 
-        Set<ScheduleItem.Builder> uniqueBuilders = new HashSet<>();
-        for (ScheduleItem.Builder b : uniqueExceptClassroomBuilders) {
-            boolean foundSame = false;
-            for(ScheduleItem.Builder builder : uniqueBuilders) {
-                if (builder.areSameExceptClassroom(b)) {
-                    foundSame = true;
+                            mergedByDisciplineAndClassroom.add(merged);
+                        } else {
+                            // different disciplines at same time
+                            ScheduleItem.Builder merged = outer.clone();
+                            if (outer.getDisciplineName().compareTo(inner.getDisciplineName()) < 0) {
+                                merged.classroom(outer.getClassroom() + "/" + inner.getClassroom())
+                                        .disciplineName(outer.getDisciplineName() + "/" + inner.getDisciplineName())
+                                        .teacherName(outer.getTeacherName() + "/" + inner.getTeacherName());
+                            } else {
+                                merged.classroom(inner.getClassroom() + "/" + outer.getClassroom())
+                                        .disciplineName(inner.getDisciplineName() + "/" + outer.getDisciplineName())
+                                        .teacherName(inner.getTeacherName() + "/" + outer.getTeacherName());
+
+                            }
+                            mergedByDisciplineAndClassroom.add(merged);
+                        }
+                        mergedByDisciplineAndClassroom.remove(inner);
+                        mergedByDisciplineAndClassroom.remove(outer);
+                    }
                 }
             }
+        }
 
-            if (!foundSame) {
-                uniqueBuilders.add(b);
+        asScheduleItemBuilders = null;
+        // merge by repeats if possible
+        for(ScheduleItem.Builder outer : mergedByDisciplineAndClassroom) {
+            for (ScheduleItem.Builder inner : mergedByDisciplineAndClassroom) {
+                if (outer != inner) {
+                    if (outer.areSameExceptRepeats(inner)) {
+                        outer.mergeByRepeats(inner);
+                        inner.mergeByRepeats(outer);
+                    }
+                }
+            }
+        }
+        Set<ScheduleItem.Builder> unique = new HashSet<>(mergedByDisciplineAndClassroom);
+        for(ScheduleItem.Builder builder : mergedByDisciplineAndClassroom) {
+            if (!unique.contains(builder)) {
+                unique.add(builder);
             }
         }
 
         Set<ScheduleItem> result = new HashSet<>();
-
-        for(ScheduleItem.Builder builder : uniqueBuilders) {
+        for(ScheduleItem.Builder builder : unique) {
             result.add(builder.build());
         }
 

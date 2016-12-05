@@ -210,7 +210,27 @@ public final class ScheduleItem implements Serializable {
         return new Builder();
     }
 
-    public static class Builder {
+    /**
+     * Returns true if another {@link ScheduleItem} takes place with the same time as this.
+     * Used for tests
+     * @param that to test to
+     * @return true if another {@link ScheduleItem} takes place with the same time as this, false  otherwise
+     */
+    /*package*/ boolean takePlaceAtSameTime(ScheduleItem that) {
+
+        if (dayOfWeek != that.dayOfWeek)
+            return false;
+        if (orderInDay != that.orderInDay)
+            return false;
+
+        return (repeatsEveryFirstWeekOfMonth && that.repeatsEveryFirstWeekOfMonth)
+                || (repeatsEverySecondWeekOfMonth && that.repeatsEverySecondWeekOfMonth)
+                || (repeatsEveryThirdWeekOfMonth && that.repeatsEveryThirdWeekOfMonth)
+                || (repeatsEveryFourthWeekOfMonth && that.repeatsEveryFourthWeekOfMonth);
+
+    }
+
+    public static class Builder implements Cloneable {
         private int dayOfWeek;
         private int orderInDay;
         private boolean repeatsEveryFirstWeekOfMonth;
@@ -225,6 +245,26 @@ public final class ScheduleItem implements Serializable {
         private String teacherName;
         private boolean physicalEducation;
         private boolean militaryLesson;
+
+        public Builder(){
+
+        }
+        public Builder(Builder other){
+            this.dayOfWeek = other.dayOfWeek;
+            this.orderInDay = other.orderInDay;
+            this.repeatsEveryFirstWeekOfMonth = other.repeatsEveryFirstWeekOfMonth;
+            this.repeatsEverySecondWeekOfMonth = other.repeatsEverySecondWeekOfMonth;
+            this.repeatsEveryThirdWeekOfMonth = other.repeatsEveryThirdWeekOfMonth;
+            this.repeatsEveryFourthWeekOfMonth = other.repeatsEveryFourthWeekOfMonth;
+            this.disciplineName = other.disciplineName;
+            this.isLecture = other.isLecture;
+            this.isSeminar = other.isSeminar;
+            this.isLaboratoryWork = other.isLaboratoryWork;
+            this.classroom = other.classroom;
+            this.teacherName = other.teacherName;
+            this.physicalEducation = other.physicalEducation;
+            this.militaryLesson = other.militaryLesson;
+        }
 
         public Builder dayOfWeek(int dayOfWeek) {
             this.dayOfWeek = dayOfWeek;
@@ -429,6 +469,106 @@ public final class ScheduleItem implements Serializable {
             result = 31 * result + (physicalEducation ? 1 : 0);
             result = 31 * result + (militaryLesson ? 1 : 0);
             return result;
+        }
+
+        /*package*/ int getDayOfWeek() {
+            return dayOfWeek;
+        }
+
+        /*package*/ int getOrderInDay() {
+            return orderInDay;
+        }
+
+        /*package*/ boolean isRepeatsEveryFirstWeekOfMonth() {
+            return repeatsEveryFirstWeekOfMonth;
+        }
+
+        /*package*/ boolean isRepeatsEverySecondWeekOfMonth() {
+            return repeatsEverySecondWeekOfMonth;
+        }
+
+        /*package*/ boolean isRepeatsEveryThirdWeekOfMonth() {
+            return repeatsEveryThirdWeekOfMonth;
+        }
+
+        /*package*/ boolean isRepeatsEveryFourthWeekOfMonth() {
+            return repeatsEveryFourthWeekOfMonth;
+        }
+
+        /*package*/ String getDisciplineName() {
+            return disciplineName;
+        }
+
+        /*package*/ boolean isLecture() {
+            return isLecture;
+        }
+
+        /*package*/ boolean isSeminar() {
+            return isSeminar;
+        }
+
+        /*package*/ boolean isLaboratoryWork() {
+            return isLaboratoryWork;
+        }
+
+        /*package*/ String getClassroom() {
+            return classroom;
+        }
+
+        /*package*/ String getTeacherName() {
+            return teacherName;
+        }
+
+        /*package*/ boolean isPhysicalEducation() {
+            return physicalEducation;
+        }
+
+        /*package*/ boolean isMilitaryLesson() {
+            return militaryLesson;
+        }
+
+        @Override
+        public Builder clone(){
+            try {
+                return (Builder)super.clone();
+            } catch (CloneNotSupportedException e) {
+                // we're cloneable, this will never happen
+                throw new AssertionError(e);
+            }
+        }
+
+        @Override
+        public String toString() {
+            return "Builder{" +
+                    "dayOfWeek=" + dayOfWeek +
+                    ", orderInDay=" + orderInDay +
+                    ", repeatsEveryFirstWeekOfMonth=" + repeatsEveryFirstWeekOfMonth +
+                    ", repeatsEverySecondWeekOfMonth=" + repeatsEverySecondWeekOfMonth +
+                    ", repeatsEveryThirdWeekOfMonth=" + repeatsEveryThirdWeekOfMonth +
+                    ", repeatsEveryFourthWeekOfMonth=" + repeatsEveryFourthWeekOfMonth +
+                    ", disciplineName='" + disciplineName + '\'' +
+                    ", isLecture=" + isLecture +
+                    ", isSeminar=" + isSeminar +
+                    ", isLaboratoryWork=" + isLaboratoryWork +
+                    ", classroom='" + classroom + '\'' +
+                    ", teacherName='" + teacherName + '\'' +
+                    ", physicalEducation=" + physicalEducation +
+                    ", militaryLesson=" + militaryLesson +
+                    '}';
+        }
+
+        /*package*/ boolean takePlaceAtSameTime(Builder that) {
+
+            if (dayOfWeek != that.dayOfWeek)
+                return false;
+            if (orderInDay != that.orderInDay)
+                return false;
+
+            return (repeatsEveryFirstWeekOfMonth && that.repeatsEveryFirstWeekOfMonth)
+                    || (repeatsEverySecondWeekOfMonth && that.repeatsEverySecondWeekOfMonth)
+                    || (repeatsEveryThirdWeekOfMonth && that.repeatsEveryThirdWeekOfMonth)
+                    || (repeatsEveryFourthWeekOfMonth && that.repeatsEveryFourthWeekOfMonth);
+
         }
     }
 }
