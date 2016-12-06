@@ -19,4 +19,12 @@ import com.google.gson.annotations.SerializedName;
      */
     @SerializedName("Name")
     String name;
+
+    @Override
+    public String toString() {
+        return "GroupInternal{" +
+                "code='" + code + '\'' +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

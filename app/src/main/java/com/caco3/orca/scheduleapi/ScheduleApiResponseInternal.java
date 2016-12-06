@@ -2,6 +2,8 @@ package com.caco3.orca.scheduleapi;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Arrays;
+
 /**
  * Model object for schedule response returned by {@link ScheduleService}.
  *
@@ -16,4 +18,13 @@ import com.google.gson.annotations.SerializedName;
 
     @SerializedName("Times")
     TimeInternal[] times;
+
+    @Override
+    public String toString() {
+        return "ScheduleApiResponseInternal{" +
+                "scheduleItems=" + Arrays.toString(scheduleItems) +
+                ", semesterDescription='" + semesterDescription + '\'' +
+                ", times=" + Arrays.toString(times) +
+                '}';
+    }
 }

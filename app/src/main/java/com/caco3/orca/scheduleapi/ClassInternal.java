@@ -34,4 +34,14 @@ import com.google.gson.annotations.SerializedName;
      */
     @SerializedName("TeacherFullName")
     String teacherFullName;
+
+    @Override
+    public String toString() {
+        return "ClassInternal{" +
+                "code='" + code + '\'' +
+                ", name='" + name + '\'' +
+                ", teacherName='" + teacherName + '\'' +
+                ", teacherFullName='" + teacherFullName + '\'' +
+                '}';
+    }
 }

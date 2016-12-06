@@ -35,4 +35,14 @@ import com.google.gson.annotations.SerializedName;
      */
     @SerializedName("TimeTo")
     String timeTo;
+
+    @Override
+    public String toString() {
+        return "TimeInternal{" +
+                "code=" + code +
+                ", time='" + time + '\'' +
+                ", timeFrom='" + timeFrom + '\'' +
+                ", timeTo='" + timeTo + '\'' +
+                '}';
+    }
 }

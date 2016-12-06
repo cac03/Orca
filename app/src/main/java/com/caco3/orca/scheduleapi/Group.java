@@ -6,4 +6,11 @@ package com.caco3.orca.scheduleapi;
  */
 /*package*/ class Group {
     String group;
+
+    @Override
+    public String toString() {
+        return "Group{" +
+                "group='" + group + '\'' +
+                '}';
+    }
 }

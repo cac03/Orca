@@ -20,4 +20,11 @@ import com.google.gson.annotations.SerializedName;
     @SerializedName("Name")
     String name;
 
+    @Override
+    public String toString() {
+        return "RoomInternal{" +
+                "code=" + code +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

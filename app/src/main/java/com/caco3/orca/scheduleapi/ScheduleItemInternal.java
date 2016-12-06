@@ -22,4 +22,16 @@ import com.google.gson.annotations.SerializedName;
 
     @SerializedName("Time")
     TimeInternal time;
+
+    @Override
+    public String toString() {
+        return "ScheduleItemInternal{" +
+                "classInternal=" + classInternal +
+                ", day=" + day +
+                ", dayNumber=" + dayNumber +
+                ", group=" + group +
+                ", room=" + room +
+                ", time=" + time +
+                '}';
+    }
 }
