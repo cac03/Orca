@@ -11,8 +11,9 @@ import java.util.List;
     /**
      * Called when there is no saved group to show schedule for,
      * in 'no group selected' view the user must get suggestions to select group
+     * @param list with all group names schedule for is available
      */
-    void showNoGroupSelectedView();
+    void showNoGroupSelectedView(List<String> list);
 
     /**
      * Called when an error occurred while we were trying to load group names
