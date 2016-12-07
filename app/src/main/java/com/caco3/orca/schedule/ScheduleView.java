@@ -9,10 +9,10 @@ import java.util.List;
 /*package*/ interface ScheduleView extends BaseView<SchedulePresenter> {
 
     /**
-     * When this view run for the first time, we try to predict the group the app user studies in,
-     * if we couldn't do it, we must notify him about it and suggest to select it manually
+     * Called when there is no saved group to show schedule for,
+     * in 'no group selected' view the user must get suggestions to select group
      */
-    void showCouldNotPredictGroupErrorView();
+    void showNoGroupSelectedView();
 
     /**
      * Called when an error occurred while we were trying to load group names
