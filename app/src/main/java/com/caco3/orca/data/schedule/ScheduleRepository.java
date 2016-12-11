@@ -1,5 +1,6 @@
 package com.caco3.orca.data.schedule;
 
+import com.caco3.orca.schedule.model.Lesson;
 import com.caco3.orca.scheduleapi.ScheduleItem;
 
 import java.util.Collection;
@@ -11,29 +12,6 @@ import java.util.Set;
  * An interface for repository which stores schedule
  */
 public interface ScheduleRepository {
-
-    /**
-     * Saves schedule and associates it in repository with provided groupName
-     * @param groupName associated with schedule
-     * @param scheduleItems schedule to save
-     */
-    void saveSchedule(String groupName, Set<ScheduleItem> scheduleItems);
-
-    /**
-     * Retrieves schedule associated with provided groupName.
-     * It returns {@link ScheduleItem} already sorted by {@link ScheduleItem#dayOfWeek}
-     * and then {@link ScheduleItem#orderInDay}
-     *
-     * @param groupName to get schedule for
-     * @return list of schedule items sorted by dayOfWeek and then by orderInDay
-     */
-    List<ScheduleItem> getSchedule(String groupName);
-
-    /**
-     * Removes saved schedule from repository
-     * @param groupName to remove repository for
-     */
-    void removeSchedule(String groupName);
 
     /**
      * Saves a collection of group names schedule for is available in {@link com.caco3.orca.scheduleapi.ScheduleApi}
@@ -48,4 +26,37 @@ public interface ScheduleRepository {
      * were no group names saved with {@link #saveGroupNames(Collection)}
      */
     List<String> getGroupNames();
+
+    /**
+     * Saves schedule into repository. So it can be retrieved later
+     * @param lessons schedule to save
+     * @param groupName associated with this schedule
+     */
+    void saveSchedule(List<Lesson> lessons, String groupName);
+
+    /**
+     * Returns the whole schedule
+     * @param groupName to retrieve schedule for
+     * @return list of lessons, not null. Will return empty list if no schedule was saved
+     */
+    List<Lesson> getSchedule(String groupName);
+
+    /**
+     * Returns saved schedule, where first lesson will take place later than <code>from</code>
+     * @param groupName to get schedule for
+     * @param from starting with time
+     * @return list of lessons, not null. Will return empty list if no schedule was saved
+     */
+    List<Lesson> getSchedule(String groupName, long from);
+
+    /**
+     * Returns saved schedule, where first lesson will take place later than <code>from</code>, and the first
+     * earlier <code>to</code>
+     * @param groupName to get schedule for
+     * @param from millis since epoch
+     * @param to millis since epoch
+     * @return list of lessons, not null. Will return empty list if no schedule was saved
+     */
+    List<Lesson> getSchedule(String groupName, long from, long to);
+
 }
