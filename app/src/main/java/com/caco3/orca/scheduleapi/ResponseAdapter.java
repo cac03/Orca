@@ -14,93 +14,6 @@ import timber.log.Timber;
 public class ResponseAdapter {
 
     /**
-     * Adapts raw {@link ScheduleApiResponseInternal} to set of {@link ScheduleItem}
-     * @param responseInternal to adapt to
-     * @return set of schedule items
-     */
-    public static Set<ScheduleItem> adapt(ScheduleApiResponseInternal responseInternal) {
-        // Create builder for each scheduleItems from raw item and collect them into set
-        Set<ScheduleItem.Builder> asScheduleItemBuilders = new HashSet<>();
-        if (responseInternal.scheduleItems != null) { // ANYTHING can happen
-
-            for (ScheduleItemInternal scheduleItemInternal : responseInternal.scheduleItems) {
-                if (scheduleItemInternal != null) {
-                    ScheduleItem.Builder builder = builderFromScheduleItemInternal(scheduleItemInternal);
-                    if (builder != null) {
-                        asScheduleItemBuilders.add(builder);
-                    } // no log in else clause since there is logging in builderFromScheduleItemInternal method
-                } else {
-                    Timber.e("Couldn't parse scheduleItemInternal. scheduleItemInternal == null.");
-                }
-            }
-        } else {
-            // responseInternal.scheduleItems == null
-            Timber.e("responseInternal.scheduleItems == null");
-        }
-
-        /**
-         * There is possible situation when two different schedule items take place at same time.
-         * It's not permissible for us to return them in set. So we have to merge them and create one
-         * item where their properties are combined.
-         *
-         * Also there is possible situation when two different schedule items are exactly same except
-         * classroom name. It's also not permissible for us. We will merge them to.
-         *
-         * We will collect all items from response and merged items in the next set
-         */
-        Set<ScheduleItem.Builder> mergedByDisciplineAndClassroom = new HashSet<>(asScheduleItemBuilders);
-        for (ScheduleItem.Builder outer : asScheduleItemBuilders) {
-            for (ScheduleItem.Builder inner : asScheduleItemBuilders) {
-                if (outer != inner) {
-                    if (outer.takePlaceAtSameTime(inner)) {
-                        // they take place at the same time
-                        if (outer.getDisciplineName().equals(inner.getDisciplineName())) {
-                            // two classrooms for same discipline name
-                            // merge classroom string
-                            mergedByDisciplineAndClassroom.add(mergeByClassroom(inner, outer, "/"));
-                        } else {
-                            // different disciplines at same time
-                            mergedByDisciplineAndClassroom
-                                    .add(mergeByDisciplinesClassroomAndTeacher(inner, outer, "/"));
-                        }
-                        mergedByDisciplineAndClassroom.remove(inner);
-                        mergedByDisciplineAndClassroom.remove(outer);
-                    }
-                }
-            }
-        }
-
-        asScheduleItemBuilders = null;
-        // merge by repeats if possible
-        for(ScheduleItem.Builder outer : mergedByDisciplineAndClassroom) {
-            for (ScheduleItem.Builder inner : mergedByDisciplineAndClassroom) {
-                if (outer != inner) {
-                    if (outer.areSameExceptRepeats(inner)) {
-                        // merging outer with inner
-                        // and inner with outer
-                        // because we need to get true by calling equals on them
-                        outer.mergeByRepeats(inner);
-                        inner.mergeByRepeats(outer);
-                    }
-                }
-            }
-        }
-        Set<ScheduleItem.Builder> unique = new HashSet<>(mergedByDisciplineAndClassroom);
-        for(ScheduleItem.Builder builder : mergedByDisciplineAndClassroom) {
-            if (!unique.contains(builder)) {
-                unique.add(builder);
-            }
-        }
-
-        Set<ScheduleItem> result = new HashSet<>();
-        for(ScheduleItem.Builder builder : unique) {
-            result.add(builder.build());
-        }
-
-        return result;
-    }
-
-    /**
      * Returns a {@link com.caco3.orca.scheduleapi.ScheduleItem.Builder} where all fields are set from provided <code>internal</code>
      * or null if there any error happened during parsing {@link ScheduleItemInternal}
      * @param internal to get builder from
@@ -191,97 +104,6 @@ public class ResponseAdapter {
     }
 
     /**
-     * Returns a new {@link com.caco3.orca.scheduleapi.ScheduleItem.Builder} instance where
-     * {@link com.caco3.orca.scheduleapi.ScheduleItem.Builder#classroom(String)}
-     * set using <code>first.getClassroom() + separator + second.classroom();</code>
-     *
-     * Note that order of combining classrooms is natural.
-     * In other words suppose that string of <code>first</code>'s classroom is lexicographically
-     * less than <code>second</code>'s
-     * then in returned Builder classroom string will be set as result of expression:
-     * <code>first.getClassroom() + separator + second.classroom();</code>.
-     * And vice versa.
-     *
-     * This method is commutative. Formally
-     * <code>mergeByClassroom(a, b, separator).equals(mergeByClassroom(b, a, separator)); </code>
-     * returns true. This ensures that when this method called twice for same builders with different
-     * order, their <code>equals()</code> will return true
-     *
-     * @param first to merge
-     * @param second to merge
-     * @param separator used to combine strings
-     * @return Returns a new {@link com.caco3.orca.scheduleapi.ScheduleItem.Builder}
-     *
-     * @throws NullPointerException if <code>first == null || second == null</code>
-     */
-    private static ScheduleItem.Builder mergeByClassroom(ScheduleItem.Builder first, ScheduleItem.Builder second, String separator) {
-        Preconditions.checkNotNull(first, "first == null");
-        Preconditions.checkNotNull(second, "second == null");
-
-        ScheduleItem.Builder merged = first.clone();
-        /**
-         * We must to compare them to ensure commutative property for this method to prevent case
-         * when this method called twice for same builders and their <code>equals()</code>
-         * returned false
-         */
-        if (first.getClassroom().compareTo(second.getClassroom()) < 0) {
-            merged.classroom(first.getClassroom() + separator + second.getClassroom());
-        } else {
-            merged.classroom(second.getClassroom() + separator + first.getClassroom());
-        }
-
-        return merged;
-    }
-
-    /**
-     * Returns a new {@link com.caco3.orca.scheduleapi.ScheduleItem.Builder} instance where
-     * {@link com.caco3.orca.scheduleapi.ScheduleItem.Builder#teacherName(String)}
-     * set using <code>first.getTeacherName() + separator + second.getTeacherName();</code>,
-     * {@link com.caco3.orca.scheduleapi.ScheduleItem.Builder#classroom(String)}
-     * set using <code>first.getClassroom() + separator + second.getClassroom();</code>,
-     * {@link com.caco3.orca.scheduleapi.ScheduleItem.Builder#disciplineName(String)}}
-     * set using <code>first.getDisciplineName() + separator + second.getDisciplineName();</code>
-     *
-     * Note that order of combining classrooms is natural.
-     * In other words suppose that string of <code>first</code>'s disciplineName is lexicographically
-     * less than <code>second</code>'s
-     * then in returned Builder classroom string will be set as result of expression:
-     * <code>first.getDisciplineName() + separator + second.getDisciplineName();</code>.
-     * And vice versa.
-     *
-     * This method is commutative. Formally
-     * <code>mergeByDisciplinesClassroomAndTeacher(a, b, separator)
-     * .equals(mergeByDisciplinesClassroomAndTeacher(b, a, separator)); </code>
-     * returns true. This ensures that when this method called twice for same builders with different
-     * order, their <code>equals()</code> will return true
-     *
-     * @param first to merge
-     * @param second to merge
-     * @param separator used to combine strings
-     * @return Returns a new {@link com.caco3.orca.scheduleapi.ScheduleItem.Builder}
-     *
-     * @throws NullPointerException if <code>first == null || second == null</code>
-     */
-    private static ScheduleItem.Builder mergeByDisciplinesClassroomAndTeacher(ScheduleItem.Builder first, ScheduleItem.Builder second, String separator) {
-        Preconditions.checkNotNull(first, "first == null");
-        Preconditions.checkNotNull(second, "second == null");
-
-        ScheduleItem.Builder merged = first.clone();
-        if (first.getDisciplineName().compareTo(second.getDisciplineName()) < 0) {
-            merged.classroom(first.getClassroom() + separator + second.getClassroom())
-                    .disciplineName(first.getDisciplineName() + separator + second.getDisciplineName())
-                    .teacherName(first.getTeacherName() + separator + second.getTeacherName());
-        } else {
-            merged.classroom(second.getClassroom() + separator + first.getClassroom())
-                    .disciplineName(second.getDisciplineName() + separator + first.getDisciplineName())
-                    .teacherName(second.getTeacherName() + separator + first.getTeacherName());
-
-        }
-
-        return merged;
-    }
-
-    /**
      * Util methods checks whether are all required fields for converting it to {@link ScheduleItem}
      * in {@link ScheduleItemInternal} are not null
      * @param internal to check for
@@ -319,5 +141,34 @@ public class ResponseAdapter {
         }
 
         return true;
+    }
+
+    /**
+     * Converts {@link ScheduleItemInternal} from {@link ScheduleApiResponseInternal}
+     * to set of {@link ScheduleItem}
+     * @param responseInternal to convert from
+     * @return set of schedule items
+     */
+    /*package*/ static Set<ScheduleItem> adapt(ScheduleApiResponseInternal responseInternal) {
+        // Create builder for each scheduleItems from raw item and collect them into set
+        Set<ScheduleItem> result = new HashSet<>();
+        if (responseInternal.scheduleItems != null) { // ANYTHING can happen
+
+            for (ScheduleItemInternal scheduleItemInternal : responseInternal.scheduleItems) {
+                if (scheduleItemInternal != null) {
+                    ScheduleItem.Builder builder = builderFromScheduleItemInternal(scheduleItemInternal);
+                    if (builder != null) {
+                        result.add(builder.build());
+                    } // no log in else clause since there is logging in builderFromScheduleItemInternal method
+                } else {
+                    Timber.e("Couldn't parse scheduleItemInternal. scheduleItemInternal == null.");
+                }
+            }
+        } else {
+            // responseInternal.scheduleItems == null
+            Timber.e("responseInternal.scheduleItems == null");
+        }
+
+        return result;
     }
 }
