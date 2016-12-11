@@ -13,7 +13,7 @@ public class ScheduleApiModule {
 
     @Provides
     @Singleton
-    ScheduleApi provideScheduleApi(){
+    public ScheduleApi provideScheduleApi(){
         return ScheduleApiFactory.getScheduleApi();
     }
 }

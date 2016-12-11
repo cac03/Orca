@@ -3,7 +3,7 @@ package com.caco3.orca.schedule;
 /**
  * An interface for preferences saved for {@link ScheduleActivity}
  */
-/*package*/ interface SchedulePreferences {
+public interface SchedulePreferences {
 
     /**
      * Returns group name to show schedule for

@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import com.caco3.orca.credentials.CredentialsModule;
 import com.caco3.orca.data.schedule.ScheduleRepositoryModule;
 import com.caco3.orca.orioks.OrioksModule;
+import com.caco3.orca.schedule.SchedulePreferencesModule;
 import com.caco3.orca.scheduleapi.ScheduleApiModule;
 
 import timber.log.Timber;
@@ -45,7 +46,8 @@ public class OrcaApp extends Application {
                 .credentialsModule(new CredentialsModule())
                 .applicationModule(new ApplicationModule(this))
                 .scheduleApiModule(new ScheduleApiModule())
-                .scheduleRepositoryModule(new ScheduleRepositoryModule());
+                .scheduleRepositoryModule(new ScheduleRepositoryModule())
+                .schedulePreferencesModule(new SchedulePreferencesModule());
     }
 
     @NonNull

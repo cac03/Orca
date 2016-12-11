@@ -9,6 +9,9 @@ import com.caco3.orca.data.schedule.ScheduleRepository;
 import com.caco3.orca.data.schedule.ScheduleRepositoryModule;
 import com.caco3.orca.orioks.Orioks;
 import com.caco3.orca.orioks.OrioksModule;
+import com.caco3.orca.schedule.ScheduleModule;
+import com.caco3.orca.schedule.SchedulePreferences;
+import com.caco3.orca.schedule.SchedulePreferencesModule;
 import com.caco3.orca.scheduleapi.ScheduleApi;
 import com.caco3.orca.scheduleapi.ScheduleApiModule;
 
@@ -21,8 +24,11 @@ import dagger.Component;
         CredentialsModule.class,
         ApplicationModule.class,
         ScheduleApiModule.class,
-        ScheduleRepositoryModule.class})
+        ScheduleRepositoryModule.class,
+        SchedulePreferencesModule.class})
 public interface ApplicationComponent {
+
+    SchedulePreferences getSchedulePreferences();
 
     ScheduleRepository getScheduleRepository();
 
