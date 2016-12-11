@@ -5,10 +5,12 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.caco3.orca.schedule.model.Lesson;
+
 /*package*/final class ScheduleDbHelper extends SQLiteOpenHelper  {
 
     private static final String DATABASE_NAME = "schedule.db";
-    private static final int DB_VERSION = 3;
+    private static final int DB_VERSION = 4;
 
     /*package*/ ScheduleDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DB_VERSION);
@@ -16,71 +18,16 @@ import android.database.sqlite.SQLiteOpenHelper;
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        ScheduleItems.onCreate(db);
         Groups.onCreate(db);
+        Lessons.onCreate(db);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        ScheduleItems.onUpgrade(db, oldVersion, newVersion);
         Groups.onUpgrade(db, oldVersion, newVersion);
+        Lessons.onUpgrade(db, oldVersion, newVersion);
     }
 
-    /**
-     * @see {@link com.caco3.orca.scheduleapi.ScheduleItem}
-     */
-    /*package*/ static class ScheduleItems {
-        /*package*/ static final String TABLE_NAME = "schedule_items";
-
-        /*package*/ static final String KEY__ID = "_id";
-        /*package*/ static final String KEY_DAY_OF_WEEK = "day_of_week";
-        /*package*/ static final String KEY_ORDER_IN_DAY = "order_in_day";
-        /*package*/ static final String KEY_REPEATS_EVERY_FIRST_WEEK_OF_MONTH
-                = "repeats_every_first_week_of_month";
-        /*package*/ static final String KEY_REPEATS_EVERY_SECOND_WEEK_OF_MONTH
-                = "repeats_every_second_week_of_month";
-        /*package*/ static final String KEY_REPEATS_EVERY_THIRD_WEEK_OF_MONTH
-                = "repeats_every_third_week_of_month";
-        /*package*/ static final String KEY_REPEATS_EVERY_FOURTH_WEEK_OF_MONTH
-                = "repeats_every_fourth_week_of_month";
-        /*package*/ static final String KEY_DISCIPLINE_NAME = "disc_name";
-        /*package*/ static final String KEY_IS_LECTURE = "is_lecture";
-        /*package*/ static final String KEY_IS_SEMINAR = "is_seminar";
-        /*package*/ static final String KEY_IS_LABORATORY_WORK = "is_laboratory_work";
-        /*package*/ static final String KEY_CLASSROOM = "classroom";
-        /*package*/ static final String KEY_TEACHER_NAME = "teacher_name";
-        /*package*/ static final String KEY_IS_PHYSICAL_EDUCATION = "is_pe";
-        /*package*/ static final String KEY_IS_MILITARY_LESSON = "is_military";
-        /*package*/ static final String KEY_GROUP_NAME = "group_name";
-
-        private static void onCreate(SQLiteDatabase db) {
-            db.execSQL("CREATE TABLE " + TABLE_NAME + " ("
-                    + KEY__ID + " INTEGER PRIMARY KEY, "
-                    + KEY_DAY_OF_WEEK + " INTEGER, "
-                    + KEY_ORDER_IN_DAY + " INTEGER, "
-                    + KEY_REPEATS_EVERY_FIRST_WEEK_OF_MONTH + " INTEGER, "
-                    + KEY_REPEATS_EVERY_SECOND_WEEK_OF_MONTH + " INTEGER, "
-                    + KEY_REPEATS_EVERY_THIRD_WEEK_OF_MONTH + " INTEGER, "
-                    + KEY_REPEATS_EVERY_FOURTH_WEEK_OF_MONTH + " INTEGER, "
-                    + KEY_DISCIPLINE_NAME + " TEXT, "
-                    + KEY_IS_LECTURE + " INTEGER, "
-                    + KEY_IS_SEMINAR + " INTEGER, "
-                    + KEY_IS_LABORATORY_WORK + " INTEGER, "
-                    + KEY_CLASSROOM + " TEXT, "
-                    + KEY_TEACHER_NAME + " TEXT, "
-                    + KEY_IS_PHYSICAL_EDUCATION + " INTEGER, "
-                    + KEY_IS_MILITARY_LESSON + " INTEGER, "
-                    + KEY_GROUP_NAME + " TEXT"
-                    + ");");
-
-        }
-
-        private static void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-            onCreate(db);
-        }
-
-    }
 
     /*package*/ static class Groups {
         /*package*/ static final String TABLE_NAME = "groups";
@@ -95,6 +42,61 @@ import android.database.sqlite.SQLiteOpenHelper;
                     + ")");
         }
 
+        @SuppressWarnings("unused")
+        private static void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+            onCreate(db);
+        }
+    }
+
+    /**
+     * Table for {@link com.caco3.orca.schedule.model.Lesson}.
+     */
+    /*package*/ static class Lessons {
+        /*package*/ static final String TABLE_NAME = "lessons";
+        /*package*/ static final String KEY__ID = "_id";
+        /** {@link Lesson#getTeacherName()}*/
+        /*package*/ static final String KEY_TEACHER = "teacher";
+        /** {@link Lesson#getClassroom()} */
+        /*package*/ static final String KEY_CLASSROOM = "classroom";
+        /** {@link Lesson#getBeginMillis()} */
+        /*package*/ static final String KEY_BEGIN_AT = "begin";
+        /** {@link Lesson#getEndMillis()} */
+        /*package*/ static final String KEY_END_AT = "end";
+        /** {@link Lesson#getDisciplineName()} */
+        /*package*/ static final String KEY_DISCIPLINE = "discipline";
+        /**
+         * Mapped from
+         * {@link Lesson#isLaboratoryWork()}
+         * {@link Lesson#isSeminar()}
+         * {@link Lesson#isLecture()}
+         * {@link Lesson#isPhysicalEducation()}
+         * {@link Lesson#isMilitaryLesson()}
+         * by {@link ScheduleRepositoryDbImpl}
+         * @see ScheduleRepositoryDbImpl#TYPE_LABORATORY_WORK
+         * @see ScheduleRepositoryDbImpl#TYPE_LECTURE
+         * @see ScheduleRepositoryDbImpl#TYPE_MILITARY_LESSON
+         * @see ScheduleRepositoryDbImpl#TYPE_SEMINAR
+         * @see ScheduleRepositoryDbImpl#TYPE_PHYSICAL_EDUCATION
+         */
+        /*package*/ static final String KEY_TYPE = "type";
+        /** Associated with lesson */
+        /*package*/ static final String KEY_GROUP_NAME = "group_name";
+
+        private static void onCreate(SQLiteDatabase db) {
+            db.execSQL("CREATE TABLE " + TABLE_NAME + " ("
+                    + KEY__ID + " INTEGER PRIMARY KEY, "
+                    + KEY_TEACHER + " TEXT, "
+                    + KEY_CLASSROOM + " TEXT, "
+                    + KEY_DISCIPLINE + " TEXT, "
+                    + KEY_BEGIN_AT + " INTEGER, "
+                    + KEY_END_AT + " INTEGER, "
+                    + KEY_TYPE + " INTEGER, "
+                    + KEY_GROUP_NAME + " TEXT"
+                    + ")");
+        }
+
+        @SuppressWarnings("unused")
         private static void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
             onCreate(db);
