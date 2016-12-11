@@ -132,6 +132,9 @@ public final class ScheduleItem implements Serializable {
 
         int weekOfSemester = MietUtils.getWeekOfSemester(calendar) - 1;
 
+        if (weekOfSemester < 0) {
+            return false;
+        }
         /*
          * What week of month is provided
          */
