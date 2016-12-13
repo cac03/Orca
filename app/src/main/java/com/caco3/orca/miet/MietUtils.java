@@ -91,8 +91,7 @@ public class MietUtils {
         newYear.set(Calendar.MONTH, Calendar.DECEMBER);
         newYear.set(Calendar.DAY_OF_MONTH, 31);
         if (endOfAutumnSemester.compareTo(newYear) > 0) {
-            endOfAutumnSemester.set(Calendar.MONTH, Calendar.DECEMBER);
-            endOfAutumnSemester.set(Calendar.DAY_OF_MONTH, 31);
+            endOfAutumnSemester.setTimeInMillis(newYear.getTimeInMillis());
         }
 
         startOfSpringSemester = Calendar.getInstance();
