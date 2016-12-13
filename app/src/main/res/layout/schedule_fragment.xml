@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <!-- main content -->
+    <LinearLayout
+        android:id="@+id/schedule_main_content_view"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:visibility="visible">
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/schedule_refresh_layout"
+            android:background="@color/grayLight">
+
+            <com.caco3.orca.ui.widget.AutoFitRecyclerView
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnWidth="400dp"
+                android:id="@+id/schedule_recycler_view" />
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+    </LinearLayout>
+
+    <!-- progress bar view -->
+    <ProgressBar
+        android:id="@+id/schedule_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:visibility="gone"/>
+
+    <!-- Network error view.
+         Shown when any network error occurs.
+         Error text will be set programmatically -->
+    <LinearLayout
+        android:id="@+id/schedule_error_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+        <ImageView
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_orca_logo"/>
+
+        <TextView
+            android:id="@+id/schedule_error_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Unable to load something"/>
+
+        <Button
+            android:id="@+id/schedule_retry_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/retry"/>
+    </LinearLayout>
+
+    <!-- no group selected view -->
+    <LinearLayout
+        android:id="@+id/schedule_select_group_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone">
+        <ImageView
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_orca_logo"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_group_selected_error" />
+
+        <Spinner
+            android:id="@+id/schedule_select_group_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/schedule_group_selected_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@android:string/ok"/>
+    </LinearLayout>
+
+
+</LinearLayout>

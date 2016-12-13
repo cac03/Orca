@@ -13,4 +13,8 @@
     <color name="yellow">#f1c40f</color>
     <color name="green">#99cc33</color>
     <color name="brightGreen">#29cf00</color>
+    
+    <color name="red400">#EF5350</color>
+    <color name="green400">#66BB6A</color>
+    <color name="yellow400">#FFEE58</color>
 </resources>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/schedule_lesson_item_root"
+    android:background="@drawable/bottom_border"
+    android:padding="@dimen/activity_vertical_margin">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/schedule_lesson_item_ordinal_number"
+        android:textSize="24sp"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="8dp"
+        tools:text="1"/>
+
+    <TextView
+        android:id="@+id/schedule_lesson_item_discipline_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/schedule_lesson_item_ordinal_number"
+        android:layout_toEndOf="@id/schedule_lesson_item_ordinal_number"
+        android:layout_toLeftOf="@+id/schedule_lesson_item_classroom"
+        android:layout_toStartOf="@id/schedule_lesson_item_classroom"
+        android:textStyle="bold"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        tools:text="Теоретическое фантазирование"/>
+
+    <TextView
+        android:id="@+id/schedule_lesson_item_time_teacher"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/schedule_lesson_item_discipline_name"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_toRightOf="@id/schedule_lesson_item_ordinal_number"
+        android:layout_toEndOf="@id/schedule_lesson_item_ordinal_number"
+        android:layout_toLeftOf="@+id/schedule_lesson_item_classroom"
+        android:layout_toStartOf="@id/schedule_lesson_item_classroom"
+        tools:text="9:00 - 129:00, Мастер наук Фантазирования"/>
+
+
+    <TextView
+        android:id="@id/schedule_lesson_item_classroom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:textStyle="bold"
+        tools:text="9999" />
+</RelativeLayout>
