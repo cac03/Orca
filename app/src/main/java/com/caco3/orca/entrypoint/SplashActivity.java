@@ -6,6 +6,7 @@ import android.os.Bundle;
 import com.caco3.orca.OrcaApp;
 import com.caco3.orca.learning.LearningActivity;
 import com.caco3.orca.login.LoginActivity;
+import com.caco3.orca.schedule.ScheduleActivity;
 import com.caco3.orca.ui.BaseActivity;
 
 import javax.inject.Inject;
@@ -39,7 +40,7 @@ public class SplashActivity extends BaseActivity implements EntryPointActivity {
     /** from {@link EntryPointActivity}*/
     @Override
     public void navigateToLoginActivity() {
-        startActivity(new Intent(this, LoginActivity.class));
+        startActivity(new Intent(this, ScheduleActivity.class));
         finish();
     }
 

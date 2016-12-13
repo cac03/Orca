@@ -252,4 +252,36 @@ public class MietUtils {
         calendar.setTimeInMillis(millis);
         return getLessonEndTime(calendar, ordinal);
     }
+
+    /**
+     * Returns millis since epoch when current semester begins.
+     * If current time doesn't belong to autumn semester nor spring semester, returns -1
+     * @return millis since epoch when current semester begins.
+     */
+    public static long getCurrentSemesterBeginTime(){
+        Calendar calendar = Calendar.getInstance();
+        if (belongsToAutumnSemester(calendar)) {
+            return startOfAutumnSemester.getTimeInMillis();
+        } else if (belongsToSpringSemester(calendar)) {
+            return startOfSpringSemester.getTimeInMillis();
+        } else {
+            return -1;
+        }
+    }
+
+    /**
+     * Returns millis since epoch when current semester ends.
+     * If current time doesn't belong to autumn semester nor spring semester, returns -1
+     * @return millis since epoch when current semester ends.
+     */
+    public static long getCurrentSemesterEndTime(){
+        Calendar calendar = Calendar.getInstance();
+        if (belongsToAutumnSemester(calendar)) {
+            return endOfAutumnSemester.getTimeInMillis();
+        } else if (belongsToSpringSemester(calendar)) {
+            return endOfSpringSemester.getTimeInMillis();
+        } else {
+            return -1;
+        }
+    }
 }
