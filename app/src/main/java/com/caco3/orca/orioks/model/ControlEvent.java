@@ -58,9 +58,15 @@ public final class ControlEvent implements Serializable {
      */
     private boolean isEntered;
 
+    /**
+     * True if this control event is bonus for discipline where it's attached.
+     * Bonus control event will exceed max points that student can get for discipline overall(100)
+     */
+    private final boolean isBonus;
+
     private static final long serialVersionUID = -85465588452256L;
 
-    private ControlEvent(float achievedPoints, float maxAvailablePoints, Teacher enteredBy, int week, String typeName, String topic, boolean hasSeenNewEnteredPoints, boolean isEntered) {
+    private ControlEvent(float achievedPoints, float maxAvailablePoints, Teacher enteredBy, int week, String typeName, String topic, boolean hasSeenNewEnteredPoints, boolean isEntered, boolean isBonus) {
         this.achievedPoints = achievedPoints;
         this.maxAvailablePoints = maxAvailablePoints;
         this.enteredBy = enteredBy;
@@ -69,6 +75,7 @@ public final class ControlEvent implements Serializable {
         this.topic = topic;
         this.hasSeenNewEnteredPoints = hasSeenNewEnteredPoints;
         this.isEntered = isEntered;
+        this.isBonus = isBonus;
     }
 
     private ControlEvent(Builder builder) {
@@ -79,7 +86,8 @@ public final class ControlEvent implements Serializable {
                 builder.typeName,
                 builder.topic,
                 builder.hasSeenNewEnteredPoints,
-                builder.entered);
+                builder.entered,
+                builder.bonus);
 
     }
 
@@ -127,6 +135,10 @@ public final class ControlEvent implements Serializable {
         return hasSeenNewEnteredPoints;
     }
 
+    public boolean isBonus(){
+        return isBonus;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -171,6 +183,7 @@ public final class ControlEvent implements Serializable {
         private String topic;
         private boolean hasSeenNewEnteredPoints;
         private boolean entered;
+        private boolean bonus;
 
         public Builder achievedPoints(float achievedPoints) {
             this.achievedPoints = achievedPoints;
@@ -210,6 +223,12 @@ public final class ControlEvent implements Serializable {
 
         public Builder entered(boolean entered){
             this.entered = entered;
+            return this;
+        }
+
+        public Builder bonus(boolean bonus) {
+            this.bonus = bonus;
+
             return this;
         }
 
