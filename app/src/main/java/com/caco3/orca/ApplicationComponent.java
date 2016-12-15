@@ -5,6 +5,8 @@ import android.content.Context;
 
 import com.caco3.orca.credentials.CredentialsManager;
 import com.caco3.orca.credentials.CredentialsModule;
+import com.caco3.orca.data.orioks.OrioksRepository;
+import com.caco3.orca.data.orioks.OrioksRepositoryModule;
 import com.caco3.orca.data.schedule.ScheduleRepository;
 import com.caco3.orca.data.schedule.ScheduleRepositoryModule;
 import com.caco3.orca.orioks.Orioks;
@@ -25,8 +27,11 @@ import dagger.Component;
         ApplicationModule.class,
         ScheduleApiModule.class,
         ScheduleRepositoryModule.class,
-        SchedulePreferencesModule.class})
+        SchedulePreferencesModule.class,
+        OrioksRepositoryModule.class})
 public interface ApplicationComponent {
+
+    OrioksRepository getOrioksRepository();
 
     SchedulePreferences getSchedulePreferences();
 
