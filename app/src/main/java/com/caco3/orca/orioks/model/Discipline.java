@@ -94,7 +94,7 @@ public final class Discipline implements Serializable {
     public float getTotalAvailablePoints() {
         float sum = 0F;
         for (ControlEvent controlEvent : attachedControlEvents) {
-            if (controlEvent.isEntered()) {
+            if (controlEvent.isEntered() && !controlEvent.isBonus()) {
                 sum += controlEvent.getMaxAvailablePoints();
             }
         }
