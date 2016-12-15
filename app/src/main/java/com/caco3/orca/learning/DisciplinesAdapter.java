@@ -89,6 +89,9 @@ import butterknife.ButterKnife;
         @BindView(R.id.discipline_points)
         TextView disciplinePoints;
 
+        @BindView(R.id.discipline_assessment_type)
+        TextView assessmentType;
+
         private final NumberFormat numberFormat = new DecimalFormat("#.###");
 
         /*package*/ ViewHolder(View itemView) {
@@ -127,6 +130,8 @@ import butterknife.ButterKnife;
 
             disciplinePoints.setBackgroundColor(ResourcesCompat
                     .getColor(context.getResources(), pointsBgColorId, null));
+
+            assessmentType.setText(discipline.getAssessmentType());
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
