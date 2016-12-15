@@ -29,7 +29,8 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:background="@android:color/white"
-        app:menu="@menu/nav_drawer" />
+        app:menu="@menu/nav_drawer"
+        app:headerLayout="@layout/nav_header"/>
 
 
 

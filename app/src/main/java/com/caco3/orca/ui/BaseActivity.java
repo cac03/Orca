@@ -15,10 +15,19 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
+import com.caco3.orca.OrcaApp;
 import com.caco3.orca.R;
+import com.caco3.orca.header.DaggerHeaderComponent;
+import com.caco3.orca.header.HeaderPresenter;
+import com.caco3.orca.header.HeaderView;
 import com.caco3.orca.learning.LearningActivity;
+import com.caco3.orca.orioks.model.Student;
 import com.caco3.orca.schedule.ScheduleActivity;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,6 +57,13 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @see #getNavDrawerItemId()
      */
     private static final int NAV_DRAWER_NO_ITEM = -1;
+
+    /**
+     * Will be injected in {@link #setupNavigationView()},
+     * if this activity has navigation drawer
+     */
+    @Inject
+    HeaderPresenter headerPresenter;
 
 
     @Override
@@ -159,6 +175,17 @@ public abstract class BaseActivity extends AppCompatActivity {
             if (getNavDrawerItemId() != NAV_DRAWER_NO_ITEM) {
                 navigationView.getMenu().findItem(getNavDrawerItemId()).setChecked(true);
             }
+
+            // inject header presenter
+            DaggerHeaderComponent.builder()
+                    .applicationComponent(OrcaApp.get(this).getApplicationComponent())
+                    .build()
+                    .inject(this);
+
+            View header = navigationView.getHeaderView(0);
+            if (header != null) {
+                headerPresenter.onViewAttached(new NavDrawerHeaderView(header));
+            }
         }
     }
 
@@ -195,5 +222,83 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return drawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (headerPresenter != null) {
+            headerPresenter.onViewDetached();
+        }
+        super.onDestroy();
+    }
+
+    /**
+     * Represents a navigation drawer header.
+     * It's bound with {@link HeaderPresenter} which will set text when the header is attached to it
+     */
+    class NavDrawerHeaderView implements HeaderView {
+        @BindView(R.id.nav_header_week_number)
+        TextView weekNumberTextView;
+
+        @BindView(R.id.nav_header_student_name)
+        TextView studentNameTextView;
+
+        @BindView(R.id.nav_header_week_type)
+        TextView weekTypeTextView;
+
+        @BindView(R.id.nav_header_student_group)
+        TextView groupTextView;
+
+        NavDrawerHeaderView(View view) {
+            ButterKnife.bind(this, view);
+        }
+
+        @Override
+        public void showExamPeriod() {
+            weekNumberTextView.setText(getString(R.string.examination_period));
+            weekTypeTextView.setText("");
+        }
+
+        @Override
+        public void showHolidaysPeriod() {
+            weekNumberTextView.setText(getString(R.string.holiday_period));
+            weekTypeTextView.setText("");
+        }
+
+        @Override
+        public void showStudent(Student student) {
+            studentNameTextView.setText(getString(R.string.nav_header_student_name,
+                    student.getFirstName(), student.getLastName()));
+            groupTextView.setText(student.getGroup().getName());
+        }
+
+        @Override
+        public void showLearningWeek(int weekNumber) {
+            weekNumberTextView.setText(getString(R.string.nav_header_week_number, weekNumber));
+            int stringId;
+            switch ((weekNumber - 1) % 4) {
+                case 0:
+                    stringId = R.string.first_week_of_month;
+                    break;
+                case 1:
+                    stringId = R.string.second_week_of_month;
+                    break;
+                case 2:
+                    stringId = R.string.third_week_of_month;
+                    break;
+                case 3:
+                    stringId = R.string.fourth_week_of_month;
+                    break;
+                default:
+                    throw new IllegalArgumentException("(weekNumber - 1) % 4 < 0 || (weekNumber - 1) % 4 > 3, weekNumber = " + weekNumber);
+            }
+
+            weekTypeTextView.setText(getString(stringId));
+        }
+
+        @Override
+        public void setPresenter(HeaderPresenter presenter) {
+            // ignored
+        }
     }
 }
