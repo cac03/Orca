@@ -70,27 +70,7 @@ public class OrioksResponseGenerator {
     }
 
     public static OrioksResponse generateOrioksResponse(){
-        return new OrioksResponse() {
-            @Override
-            public List<Discipline> getDisciplines() {
-                return generateDisciplines(12);
-            }
-
-            @Override
-            public Student getStudent() {
-                return generateStudent();
-            }
-
-            @Override
-            public int getCurrentSemester() {
-                return random.nextInt();
-            }
-
-            @Override
-            public int getCurrentWeek() {
-                return random.nextInt();
-            }
-        };
+        return new OrioksResponse(generateDisciplines(10), generateStudent(), random.nextInt(), random.nextInt());
     }
 
     private static List<ControlEvent> generateControlEvents(int n) {
