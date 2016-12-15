@@ -22,4 +22,11 @@ import java.util.Map;
 
     @SerializedName("preps")
     /*package*/ Map<Integer, TeacherJson> teacherMap;
+
+    /**
+     * This value is a key for {@link OrioksResponseJson#departments} department
+     * associated with this discipline
+     */
+    @SerializedName("id_dis")
+    int disciplineId;
 }
