@@ -41,7 +41,7 @@ import java.util.Map;
                 .maxAvailablePoints(controlEventJson.maxPoints)
                 .achievedPoints(controlEventJson.markJson.achievedPoints)
                 .minPoints(controlEventJson.minPoints)
-                .entered(Float.compare(controlEventJson.markJson.achievedPoints, 0.0f) == 0 && controlEventJson.markJson.enteredBy.contains("методи"))
+                .entered(!(Float.compare(controlEventJson.markJson.achievedPoints, 0.0f) == 0 && controlEventJson.markJson.enteredBy.contains("методи")))
                 .build();
     }
 
