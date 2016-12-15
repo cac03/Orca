@@ -14,6 +14,8 @@ import javax.inject.Inject;
 
 import rx.Subscriber;
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 /*package*/ class LearningPresenterImpl implements LearningPresenter {
@@ -63,6 +65,8 @@ import timber.log.Timber;
         }
 
         orioksResponseSubscription = orioks.getResponseForCurrentSemester(credentials)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<OrioksResponse>() {
                     @Override
                     public void onCompleted() {
