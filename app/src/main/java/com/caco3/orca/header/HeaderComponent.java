@@ -8,7 +8,7 @@ import dagger.Component;
 
 @HeaderScope
 @Component(dependencies = ApplicationComponent.class)
-/*package*/ interface HeaderComponent {
+public interface HeaderComponent {
 
     void inject(BaseActivity activity);
 }
