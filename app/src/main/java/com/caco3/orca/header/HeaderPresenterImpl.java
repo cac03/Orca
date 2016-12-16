@@ -3,6 +3,7 @@ package com.caco3.orca.header;
 import com.caco3.orca.credentials.CredentialsManager;
 import com.caco3.orca.data.orioks.OrioksRepository;
 import com.caco3.orca.miet.MietUtils;
+import com.caco3.orca.orioks.model.Student;
 
 import java.util.Calendar;
 
@@ -31,7 +32,10 @@ import javax.inject.Inject;
             view.showExamPeriod();
         }
 
-        view.showStudent(repository.getStudent(credentialsManager.getCurrentCredentials()));
+        Student student = repository.getStudent(credentialsManager.getCurrentCredentials());
+        if (student != null) {
+            view.showStudent(student);
+        }
     }
 
     @Override
