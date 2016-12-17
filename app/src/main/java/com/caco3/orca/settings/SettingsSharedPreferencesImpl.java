@@ -80,7 +80,7 @@ import javax.inject.Inject;
     @Override
     public boolean isFirstRun() {
         return PreferenceManager.getDefaultSharedPreferences(context)
-                .getBoolean(FIRST_RUN_KEY, false);
+                .getBoolean(FIRST_RUN_KEY, true);
     }
 
     @Override
