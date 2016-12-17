@@ -54,7 +54,7 @@ import javax.inject.Inject;
     public Class<? extends BaseActivity> getStartActivity() {
         int index = PreferenceManager.getDefaultSharedPreferences(context)
                 .getInt(START_ACTIVITY_KEY, DEFAULT_ACTIVITY_INDEX);
-        if (index < 0 || index > ACTIVITIES.size()) {
+        if (index < 0 || index >= ACTIVITIES.size()) {
             throw new IllegalStateException("Stored index of activity is out of bounds of activities array"
                     + " ACTIVITIES.size() = " + ACTIVITIES.size() + " index = " + index);
         }
