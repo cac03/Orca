@@ -37,17 +37,9 @@ public class SplashActivity extends BaseActivity implements EntryPointActivity {
         entryPointManager.doWork(this);
     }
 
-    /** from {@link EntryPointActivity}*/
     @Override
-    public void navigateToLoginActivity() {
-        startActivity(new Intent(this, ScheduleActivity.class));
-        finish();
-    }
-
-    /** from {@link EntryPointActivity}*/
-    @Override
-    public void navigateToLearningActivity() {
-        startActivity(new Intent(this, LearningActivity.class));
+    public void startActivity(Class<? extends BaseActivity> activityClass) {
+        startActivity(new Intent(this, activityClass));
         finish();
     }
 }

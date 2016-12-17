@@ -1,7 +1,6 @@
 package com.caco3.orca.entrypoint;
 
-import com.caco3.orca.credentials.CredentialsManager;
-import com.caco3.orca.util.Preconditions;
+import com.caco3.orca.settings.Settings;
 
 import javax.inject.Inject;
 
@@ -12,19 +11,14 @@ import javax.inject.Inject;
 
 
     // not null, injected in c-tor
-    private CredentialsManager credentialsManager;
+    private Settings settings;
 
     @Inject
-    /*package*/ EntryPointManager(CredentialsManager credentialsManager) {
-        this.credentialsManager = Preconditions.checkNotNull(credentialsManager);
+    /*package*/ EntryPointManager(Settings settings) {
+        this.settings = settings;
     }
 
     /*package*/ void doWork(EntryPointActivity entryPointActivity){
-        if (credentialsManager.getCurrentCredentials() == null) {
-            // no user signed in
-            entryPointActivity.navigateToLoginActivity();
-        } else {
-            entryPointActivity.navigateToLearningActivity();
-        }
+        entryPointActivity.startActivity(settings.getStartActivity());
     }
 }
