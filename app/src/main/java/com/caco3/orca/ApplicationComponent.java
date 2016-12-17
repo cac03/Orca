@@ -18,6 +18,8 @@ import com.caco3.orca.schedule.SchedulePreferences;
 import com.caco3.orca.schedule.SchedulePreferencesModule;
 import com.caco3.orca.scheduleapi.ScheduleApi;
 import com.caco3.orca.scheduleapi.ScheduleApiModule;
+import com.caco3.orca.settings.Settings;
+import com.caco3.orca.settings.SettingsModule;
 
 import javax.inject.Singleton;
 
@@ -31,8 +33,11 @@ import dagger.Component;
         ScheduleRepositoryModule.class,
         SchedulePreferencesModule.class,
         OrioksRepositoryModule.class,
-        HeaderModule.class})
+        HeaderModule.class,
+        SettingsModule.class})
 public interface ApplicationComponent {
+
+    Settings getSettings();
 
     HeaderPresenter getHeaderPresenter();
 

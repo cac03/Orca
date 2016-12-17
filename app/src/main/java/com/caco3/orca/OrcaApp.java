@@ -11,6 +11,7 @@ import com.caco3.orca.header.HeaderModule;
 import com.caco3.orca.orioks.OrioksModule;
 import com.caco3.orca.schedule.SchedulePreferencesModule;
 import com.caco3.orca.scheduleapi.ScheduleApiModule;
+import com.caco3.orca.settings.SettingsModule;
 
 import timber.log.Timber;
 
@@ -51,7 +52,8 @@ public class OrcaApp extends Application {
                 .scheduleRepositoryModule(new ScheduleRepositoryModule())
                 .schedulePreferencesModule(new SchedulePreferencesModule())
                 .orioksRepositoryModule(new OrioksRepositoryModule())
-                .headerModule(new HeaderModule());
+                .headerModule(new HeaderModule())
+                .settingsModule(new SettingsModule());
     }
 
     @NonNull
