@@ -8,6 +8,7 @@ import com.caco3.orca.credentials.CredentialsModule;
 import com.caco3.orca.data.orioks.OrioksRepositoryModule;
 import com.caco3.orca.data.schedule.ScheduleRepositoryModule;
 import com.caco3.orca.header.HeaderModule;
+import com.caco3.orca.learning.preferences.LearningPreferencesModule;
 import com.caco3.orca.orioks.OrioksModule;
 import com.caco3.orca.schedule.SchedulePreferencesModule;
 import com.caco3.orca.scheduleapi.ScheduleApiModule;
@@ -53,7 +54,8 @@ public class OrcaApp extends Application {
                 .schedulePreferencesModule(new SchedulePreferencesModule())
                 .orioksRepositoryModule(new OrioksRepositoryModule())
                 .headerModule(new HeaderModule())
-                .settingsModule(new SettingsModule());
+                .settingsModule(new SettingsModule())
+                .learningPreferencesModule(new LearningPreferencesModule());
     }
 
     @NonNull

@@ -11,6 +11,8 @@ import com.caco3.orca.data.schedule.ScheduleRepository;
 import com.caco3.orca.data.schedule.ScheduleRepositoryModule;
 import com.caco3.orca.header.HeaderModule;
 import com.caco3.orca.header.HeaderPresenter;
+import com.caco3.orca.learning.preferences.LearningPreferences;
+import com.caco3.orca.learning.preferences.LearningPreferencesModule;
 import com.caco3.orca.orioks.Orioks;
 import com.caco3.orca.orioks.OrioksModule;
 import com.caco3.orca.schedule.ScheduleModule;
@@ -34,8 +36,11 @@ import dagger.Component;
         SchedulePreferencesModule.class,
         OrioksRepositoryModule.class,
         HeaderModule.class,
-        SettingsModule.class})
+        SettingsModule.class,
+        LearningPreferencesModule.class})
 public interface ApplicationComponent {
+
+    LearningPreferences getLearningPreferences();
 
     Settings getSettings();
 
