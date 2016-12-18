@@ -69,10 +69,12 @@ public class LearningFragment extends Fragment
     @Override
     public void onViewCreated(View view,
                               @Nullable Bundle savedInstanceState) {
-        DaggerLearningComponent.builder()
-                .applicationComponent(OrcaApp.get(getContext()).getApplicationComponent())
-                .build()
-                .inject(this);
+        if (presenter == null) {
+            DaggerLearningComponent.builder()
+                    .applicationComponent(OrcaApp.get(getContext()).getApplicationComponent())
+                    .build()
+                    .inject(this);
+        }
 
         presenter.onViewAttached(this);
 
