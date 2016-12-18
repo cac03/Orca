@@ -2,6 +2,7 @@ package com.caco3.orca.login;
 
 
 import com.caco3.orca.credentials.CredentialsManager;
+import com.caco3.orca.data.orioks.OrioksRepository;
 import com.caco3.orca.orioks.LoginOrPasswordIncorrectException;
 import com.caco3.orca.orioks.Orioks;
 import com.caco3.orca.orioks.UserCredentials;
@@ -38,16 +39,20 @@ import timber.log.Timber;
     // not null, will be injected in c-tor
     private CredentialsManager credentialsManager;
 
+    // not null. Injected in c-tor
+    private OrioksRepository orioksRepository;
+
     /**
      * Keep reference to subscription so we are able to tell whether we're performing login operation
      */
     private Subscription loginSubscription;
 
     @Inject
-    /*package*/ LoginPresenterImpl(Orioks orioks, CredentialsManager credentialsManager){
+    /*package*/ LoginPresenterImpl(Orioks orioks, CredentialsManager credentialsManager, OrioksRepository orioksRepository){
         Timber.d("New instance");
         this.orioks = Preconditions.checkNotNull(orioks);
         this.credentialsManager = Preconditions.checkNotNull(credentialsManager);
+        this.orioksRepository = Preconditions.checkNotNull(orioksRepository);
     }
 
     @Override
@@ -133,7 +138,16 @@ import timber.log.Timber;
                             // save credentials
                             credentialsManager.setCurrentCredentials(credentials);
 
-                            // TODO: 11/28/16 process response
+                            /**
+                             * Save response so the {@link com.caco3.orca.learning.LearningActivity}
+                             * will be able to get it
+                             */
+                            orioksRepository.saveStudent(credentials, orioksResponse.getStudent());
+                            orioksRepository.saveDisciplines(credentials,
+                                    orioksResponse.getDisciplines(),
+                                    orioksResponse.getCurrentSemester());
+                            orioksRepository.setCurrentSemester(credentials,
+                                    orioksResponse.getCurrentSemester());
                             if (view != null) {
                                 view.hideProgress();
                                 view.navigateToLearningActivity();
