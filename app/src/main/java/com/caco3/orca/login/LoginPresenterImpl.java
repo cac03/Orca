@@ -3,8 +3,8 @@ package com.caco3.orca.login;
 
 import com.caco3.orca.credentials.CredentialsManager;
 import com.caco3.orca.data.orioks.OrioksRepository;
-import com.caco3.orca.orioks.LoginOrPasswordIncorrectException;
 import com.caco3.orca.orioks.Orioks;
+import com.caco3.orca.orioks.OrioksException;
 import com.caco3.orca.orioks.UserCredentials;
 import com.caco3.orca.orioks.model.OrioksResponse;
 import com.caco3.orca.util.Preconditions;
@@ -100,6 +100,13 @@ import timber.log.Timber;
             }
 
             final UserCredentials credentials = new UserCredentials(login, password);
+            /**
+             * There is only one way to determine whether provided {@link UserCredentials}
+             * are valid: try to call {@link Orioks#getResponseForCurrentSemester(UserCredentials)}
+             * and see whether the {@link com.caco3.orca.orioks.OrioksException} is thrown.
+             * If it's thrown we assume that provided credentials are invalid. But it's not 100%
+             * guarantee... Api doesn't provide another way to determine it...
+             */
             loginSubscription = orioks.getResponseForCurrentSemester(credentials)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
@@ -110,13 +117,18 @@ import timber.log.Timber;
 
                         @Override
                         public void onError(Throwable e) {
-                            if (e instanceof LoginOrPasswordIncorrectException) {
-                                Timber.i(e, "Login or password incorrect.");
+                            Timber.i("An error occurred while retrieving orioks response for %s login",
+                                    credentials.getLogin());
+                            Timber.e(e);
+                            if (e instanceof OrioksException) {
+                                Timber.i("Orioks returned error: %s. " +
+                                        "Assuming that login or password is incorrect",
+                                        ((OrioksException)e).getOrioksErrorMessage());
                                 if (view != null) {
                                     view.sayLoginOrPasswordIsIncorrect();
                                 }
                             } else if (e instanceof IOException) {
-                                Timber.i("An i/o error occurred during signing in");
+                                Timber.i("An i/o error occurred during signing in. No network?");
                                 if (view != null) {
                                     view.sayNetworkErrorOccurred();
                                 }
