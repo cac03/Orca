@@ -22,4 +22,10 @@ import com.caco3.orca.orioks.model.Discipline;
      * and he clicked 're enter login and password button'
      */
     void onReLogInRequest();
+
+    /**
+     * Called when 'no user signed in' error view was shown
+     * and user clicked 'sign in' button
+     */
+    void onLogInClicked();
 }
