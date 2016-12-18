@@ -12,11 +12,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.caco3.orca.OrcaApp;
 import com.caco3.orca.R;
 import com.caco3.orca.login.LoginActivity;
+import com.caco3.orca.orioks.UserCredentials;
 import com.caco3.orca.orioks.model.Discipline;
 
 import java.util.ArrayList;
@@ -26,6 +29,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class LearningFragment extends Fragment
         implements LearningView,
@@ -37,6 +41,15 @@ public class LearningFragment extends Fragment
 
     @BindView(R.id.learning_refresh_layout)
     SwipeRefreshLayout refreshLayout;
+
+    @BindView(R.id.learning_progress_bar)
+    ProgressBar progressBar;
+
+    @BindView(R.id.learning_no_user_signed_in_error)
+    View noUserSignedInError;
+
+    @BindView(R.id.learning_sign_in)
+    Button signInBtn;
 
     /**
      * Adapter associated with {@link #recyclerView}
@@ -139,5 +152,35 @@ public class LearningFragment extends Fragment
         Activity activity = getActivity();
         activity.startActivity(new Intent(activity, LoginActivity.class));
         activity.finish();
+    }
+
+    @Override
+    public void navigateToLoginActivity(UserCredentials credentials) {
+        Activity activity = getActivity();
+        LoginActivity.startAndSetLogin(activity, credentials.getLogin());
+        activity.finish();
+    }
+
+    @Override
+    public void showProgress() {
+        progressBar.setVisibility(View.VISIBLE);
+        refreshLayout.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void hideProgress() {
+        progressBar.setVisibility(View.GONE);
+        refreshLayout.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showNoUserSignedInErrorView() {
+        refreshLayout.setVisibility(View.GONE);
+        noUserSignedInError.setVisibility(View.VISIBLE);
+    }
+
+    @OnClick(R.id.learning_sign_in)
+    /*package*/void onLogInClicked(){
+        presenter.onLogInClicked();
     }
 }

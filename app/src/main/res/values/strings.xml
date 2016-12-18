@@ -31,6 +31,7 @@
 
     <!-- Strings related to learning activity -->
     <string name="reenter_login_and_password">Re-enter</string>
+    <string name="no_user_signed_in">No user signed in</string>
 
     <!-- Strings related to schedule activity -->
     <string name="nav_schedule_title">Schedule</string>

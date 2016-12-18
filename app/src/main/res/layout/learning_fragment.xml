@@ -1,14 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.SwipeRefreshLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/learning_refresh_layout">
+    android:orientation="vertical">
 
-    <android.support.v7.widget.RecyclerView
+    <!-- main content -->
+    <android.support.v4.widget.SwipeRefreshLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/learning_recycler_view" />
+        android:layout_height="match_parent"
+        android:id="@+id/learning_refresh_layout">
 
-</android.support.v4.widget.SwipeRefreshLayout>
+        <android.support.v7.widget.RecyclerView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/learning_recycler_view" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <!-- progress bar view -->
+    <ProgressBar
+        android:id="@+id/learning_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:visibility="gone"/>
+
+    <!-- no user signed in error view -->
+    <LinearLayout
+        android:id="@+id/learning_no_user_signed_in_error"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_orca_logo"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_user_signed_in"/>
+
+        <Button
+            android:id="@+id/learning_sign_in"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sign_in"/>
+    </LinearLayout>
+
+</LinearLayout>
