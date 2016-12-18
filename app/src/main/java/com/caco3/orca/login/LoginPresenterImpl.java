@@ -59,6 +59,12 @@ import timber.log.Timber;
     public void onViewAttached(LoginView view) {
         Timber.d("onViewAttached()");
         this.view = view;
+
+        String initialLogin = view.getInitialLogin();
+        if (initialLogin != null) {
+            view.setLogin(initialLogin);
+        }
+
         /**
          * We were performing signing in. So we have to show progress
          */

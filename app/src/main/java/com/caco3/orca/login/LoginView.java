@@ -45,4 +45,26 @@ import com.caco3.orca.mvp.BaseView;
      * Notifies user about troubles with network
      */
     void sayNetworkErrorOccurred();
+
+
+    /**
+     * Returns login string that must be set to login field.
+     * It's useful when the user needs to re-enter his credentials and we don't want
+     * him to enter login again
+     * @return String with login that must be set to login field,
+     *          or <code>null</code> if login was not provided.
+     */
+    String getInitialLogin();
+
+    /**
+     * Sets provided string to the login field in view
+     * @param login to set
+     */
+    void setLogin(String login);
+
+    /**
+     * Sets provided string to the password field in view
+     * @param password to set
+     */
+    void setPassword(String password);
 }

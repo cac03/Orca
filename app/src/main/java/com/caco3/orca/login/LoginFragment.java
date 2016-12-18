@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.caco3.orca.OrcaApp;
 import com.caco3.orca.R;
 import com.caco3.orca.learning.LearningActivity;
+import com.caco3.orca.util.Preconditions;
 
 import javax.inject.Inject;
 
@@ -29,6 +30,14 @@ import butterknife.OnClick;
  * Controlled by {@link LoginPresenter}
  */
 public class LoginFragment extends Fragment implements LoginView {
+    /**
+     * A key for String in arguments for this fragment. That can be retrieved via
+     * {@link Fragment#getArguments()}.
+     * Arguments will have string mapped by this key if this fragment was created via
+     * {@link #createAndSetLogin(String)}
+     */
+    private static final String LOGIN_KEY = "login";
+
 
     @BindView(R.id.login_frag_login)
     EditText loginView;
@@ -51,6 +60,15 @@ public class LoginFragment extends Fragment implements LoginView {
      */
     private ProgressDialog signingInDialog;
 
+
+    public static LoginFragment createAndSetLogin(String login){
+        LoginFragment fragment = new LoginFragment();
+        Bundle args = new Bundle(1);
+        args.putString(LOGIN_KEY, login);
+        fragment.setArguments(args);
+
+        return fragment;
+    }
 
     @Nullable
     @Override
@@ -155,5 +173,25 @@ public class LoginFragment extends Fragment implements LoginView {
     @Override
     public void sayNetworkErrorOccurred() {
         Toast.makeText(getContext(), R.string.network_error_occurred, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public String getInitialLogin() {
+        Bundle args = getArguments();
+        if (args != null && args.containsKey(LOGIN_KEY)) {
+            return args.getString(LOGIN_KEY);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public void setLogin(String login) {
+        loginView.setText(login);
+    }
+
+    @Override
+    public void setPassword(String password) {
+        passwordView.setText(password);
     }
 }
