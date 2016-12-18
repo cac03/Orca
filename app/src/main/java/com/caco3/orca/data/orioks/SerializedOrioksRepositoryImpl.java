@@ -8,6 +8,7 @@ import com.caco3.orca.orioks.model.OrioksResponse;
 import com.caco3.orca.orioks.model.Student;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
@@ -22,7 +23,9 @@ import timber.log.Timber;
 
 /**
  * Concrete {@link OrioksRepository} implementation where all operations are done
- * via writing/reading Serializable objects
+ * via writing/reading Serializable objects.
+ *
+ * Don't look code here it's awful and later {@link OrioksRepository} will be changed to another one
  */
 /*package*/ class SerializedOrioksRepositoryImpl implements OrioksRepository {
     private final Context context;
@@ -52,7 +55,9 @@ import timber.log.Timber;
     @Override
     public List<Discipline> getDisciplines(UserCredentials credentials, int semester) {
         Object disciplines = readFromFile(List.class, semester + "_" + credentials.getLogin() + "_disc");
-        if (disciplines instanceof List){
+        if (disciplines == null) {
+            return null;
+        } else if (disciplines instanceof List){
             return (List<Discipline>)disciplines;
         } else {
             return new ArrayList<>((Collection<Discipline>)disciplines);
@@ -63,7 +68,10 @@ import timber.log.Timber;
         ObjectInputStream ois = null;
         try {
             ois = new ObjectInputStream(context.openFileInput(filename));
-            return (S)ois.readObject();
+            return (S) ois.readObject();
+        } catch (FileNotFoundException e) {
+            Timber.w(e);
+            return null;
         } catch (IOException e) {
             Timber.e(e);
             throw new AssertionError(e);
@@ -99,4 +107,17 @@ import timber.log.Timber;
         }
     }
 
+    @Override
+    public void setCurrentSemester(UserCredentials credentials, int semester) {
+        context.getSharedPreferences("orioks", Context.MODE_PRIVATE)
+                .edit()
+                .putInt(credentials.getLogin(), semester)
+                .apply();
+    }
+
+    @Override
+    public int getCurrentSemester(UserCredentials userCredentials) {
+        return context.getSharedPreferences("orioks", Context.MODE_PRIVATE)
+                .getInt(userCredentials.getLogin(), -1);
+    }
 }

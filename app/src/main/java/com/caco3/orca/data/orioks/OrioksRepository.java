@@ -41,4 +41,20 @@ public interface OrioksRepository {
      * @return List of disciplines or null, if no disciplines were saved
      */
     List<Discipline> getDisciplines(UserCredentials credentials, int semester);
+
+    /**
+     * Associates 'current semester' value with user credentials
+     * @param credentials to set for
+     * @param semester to set to
+     */
+    void setCurrentSemester(UserCredentials credentials, int semester);
+
+    /**
+     * Returns current semester value associated with provided {@link UserCredentials}
+     * which was previously set via {@link #setCurrentSemester(UserCredentials, int)}
+     * @param userCredentials to get value for
+     * @return current semester value associated with credentials, or -1 if no value was associated
+     * previously
+     */
+    int getCurrentSemester(UserCredentials userCredentials);
 }
