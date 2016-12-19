@@ -9,7 +9,7 @@ import java.io.Serializable;
  * Represents a model of teacher.
  * Immutable
  */
-public final class Teacher implements Serializable {
+public class Teacher implements Serializable {
 
     // not null
     private final String firstName;

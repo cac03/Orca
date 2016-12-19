@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * A model class for discipline in the university
  */
-public final class Discipline implements Serializable {
+public class Discipline implements Serializable {
     /**
      * Control events associated with this discipline
      */

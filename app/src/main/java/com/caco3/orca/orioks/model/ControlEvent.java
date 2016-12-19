@@ -7,7 +7,7 @@ import java.io.Serializable;
  *
  * For creation use {@link Builder}
  */
-public final class ControlEvent implements Serializable {
+public class ControlEvent implements Serializable {
     /**
      * Points achieved by the student for this control event
      */

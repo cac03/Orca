@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A model of student group in university
  */
-public final class Group implements Serializable {
+public class Group implements Serializable {
     /**
      * String representation of group name
      */

@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Interface for response returned by {@link com.caco3.orca.orioks.Orioks}
  */
-public final class OrioksResponse implements Serializable{
+public class OrioksResponse implements Serializable{
 
     private final List<Discipline> disciplines;
 

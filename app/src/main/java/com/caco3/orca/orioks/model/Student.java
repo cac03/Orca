@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Student model class
  */
-public final class Student implements Serializable {
+public class Student implements Serializable {
 
     /**
      * Associated with this student
