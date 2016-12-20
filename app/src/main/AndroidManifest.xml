@@ -26,6 +26,13 @@
         <activity android:name=".learning.LearningActivity" />
 
         <activity android:name=".schedule.ScheduleActivity" />
+
+        <activity android:name=".disciplinedetails.DisciplineDetailsActivity"
+            android:parentActivityName=".learning.LearningActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".learning.LearningActivity" />
+        </activity>
     </application>
 
 </manifest>
