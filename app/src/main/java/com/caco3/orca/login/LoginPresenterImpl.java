@@ -154,7 +154,7 @@ import timber.log.Timber;
                             Timber.i("Successfully receiver orioks response. Processing");
 
                             // save credentials
-                            credentialsManager.setCurrentCredentials(credentials);
+                            credentialsManager.saveAndSetAsActive(credentials);
 
                             /**
                              * Save response so the {@link com.caco3.orca.learning.LearningActivity}

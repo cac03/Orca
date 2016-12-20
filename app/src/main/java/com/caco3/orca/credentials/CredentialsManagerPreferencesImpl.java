@@ -38,7 +38,7 @@ import javax.inject.Inject;
     }
 
     @Override
-    public void setCurrentCredentials(UserCredentials credentials) {
+    public void saveAndSetAsActive(UserCredentials credentials) {
         context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
                 .edit()
                 .putString(KEY_LOGIN, credentials.getLogin())
@@ -47,7 +47,7 @@ import javax.inject.Inject;
     }
 
     @Override
-    public UserCredentials getCurrentCredentials() {
+    public UserCredentials getActive() {
         SharedPreferences sp
                 = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
         String login = sp.getString(KEY_LOGIN, null);
@@ -60,7 +60,7 @@ import javax.inject.Inject;
     }
 
     @Override
-    public void removeCurrentCredentials() {
+    public void removeActiveCredentials() {
         context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
                 .edit()
                 .remove(KEY_LOGIN)

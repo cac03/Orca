@@ -32,7 +32,7 @@ import javax.inject.Inject;
             view.showExamPeriod();
         }
 
-        Student student = repository.getStudent(credentialsManager.getCurrentCredentials());
+        Student student = repository.getStudent(credentialsManager.getActive());
         if (student != null) {
             view.showStudent(student);
         }

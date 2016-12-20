@@ -64,7 +64,7 @@ import java.util.List;
     /**
      * Shows 'no user signed in' error view.
      * It will be called by {@link LearningPresenter} when
-     * {@link CredentialsManager#getCurrentCredentials()} will return <code>null</code>
+     * {@link CredentialsManager#getActive()} will return <code>null</code>
      * which means no user signed in.
      * In this view user will be suggested to sign in.
      */

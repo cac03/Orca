@@ -10,20 +10,20 @@ public interface CredentialsManager {
 
     /**
      * Saves provided credentials in persistent storage.
-     * After credentials saved, they will be returned in {@link #getCurrentCredentials()}
+     * After credentials saved, they will be returned in {@link #getActive()}
      *
      * @param credentials to save
      */
-    void setCurrentCredentials(UserCredentials credentials);
+    void saveAndSetAsActive(UserCredentials credentials);
 
     /**
      * Reads saved current credentials in persistent storage and returns them
      * @return saved current credentials or <code>null</code> if no credentials saved
      */
-    UserCredentials getCurrentCredentials();
+    UserCredentials getActive();
 
     /**
-     * Removes current credentials from persistent storage
+     * Removes active credentials from persistent storage
      */
-    void removeCurrentCredentials();
+    void removeActiveCredentials();
 }
