@@ -32,6 +32,7 @@
     <!-- Strings related to learning activity -->
     <string name="reenter_login_and_password">Re-enter</string>
     <string name="no_user_signed_in">No user signed in</string>
+    <string name="points_not_entered_value">-</string>
 
     <!-- Strings related to schedule activity -->
     <string name="nav_schedule_title">Schedule</string>
@@ -42,4 +43,8 @@
     <string name="could_not_load_schedule_for_group_error">Could not load schedule for %1$s group</string>
     <string name="could_not_parse_response">An error occurred while parsing the response</string>
     <string name="no_lesson">No lesson</string>
+
+    <!-- Strings related to discipline details activity -->
+    <string name="control_event_points_range_str_fmt">%1$s - %2$s</string>
+    <string name="control_event_week_type_str_fmt">%1$d. %2$s</string>
 </resources>

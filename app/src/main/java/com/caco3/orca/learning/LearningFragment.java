@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.caco3.orca.OrcaApp;
 import com.caco3.orca.R;
+import com.caco3.orca.disciplinedetails.DisciplineDetailsActivity;
 import com.caco3.orca.login.LoginActivity;
 import com.caco3.orca.orioks.UserCredentials;
 import com.caco3.orca.orioks.model.Discipline;
@@ -144,7 +145,7 @@ public class LearningFragment extends Fragment
 
     @Override
     public void navigateToDisciplineDetailsActivity(Discipline discipline) {
-        Toast.makeText(getContext(), "Navigating to discipline details activity", Toast.LENGTH_SHORT).show();
+        DisciplineDetailsActivity.startForDiscipline(getActivity(), discipline);
     }
 
     @Override
