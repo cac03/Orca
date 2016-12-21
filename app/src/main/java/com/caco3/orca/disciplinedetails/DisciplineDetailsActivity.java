@@ -3,6 +3,7 @@ package com.caco3.orca.disciplinedetails;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 
 import com.caco3.orca.R;
 import com.caco3.orca.orioks.model.Discipline;
@@ -37,7 +38,16 @@ public class DisciplineDetailsActivity extends BaseActivity {
             Discipline discipline
                     = (Discipline)getIntent().getSerializableExtra(DISCIPLINE_EXTRA);
 
-            // TODO: 12/20/16 create and host fragment
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG);
+            if (fragment == null) {
+                fragment = DisciplineDetailsFragment.forDiscipline(discipline);
+                fragment.setRetainInstance(true);
+            }
+
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, fragment, FRAGMENT_TAG)
+                    .commitNow();
         } else {
             throw new IllegalStateException("intent used to start this activity doesn't contain '"
                     + DISCIPLINE_EXTRA + "' extra key. Did you run this activity via static method?");
