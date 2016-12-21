@@ -94,18 +94,11 @@ import timber.log.Timber;
                     }
                 }
             } else {
-                if (repository.getSchedule(groupName).isEmpty()) {
-                    if (view != null) {
-                        view.showProgress();
-                    }
-                    state = State.LOADING_SCHEDULE;
-                    loadSchedule().subscribe(new ScheduleLoadedSubscriber());
-                } else {
-                    state = State.SHOWING_SCHEDULE;
-                    view.showScheduleView(groupName);
-                    List<Lesson> schedule = repository.getSchedule(groupName, System.currentTimeMillis());
-                    view.showSchedule(ScheduleHelper.buildDailySchedule(schedule, SEPARATOR));
+                if (view != null) {
+                    view.showProgress();
                 }
+                retrieveSchedule(groupName, today.getTimeInMillis())
+                        .subscribe(new ScheduleReceivedSubscriber(groupName));
             }
         }
     }
@@ -293,7 +286,9 @@ import timber.log.Timber;
                     public List<DaySchedule> call(List<Lesson> lessons) {
                         return ScheduleHelper.buildDailySchedule(lessons, SEPARATOR);
                     }
-                });
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io());
     }
 
     private String getCurrentGroup(){
