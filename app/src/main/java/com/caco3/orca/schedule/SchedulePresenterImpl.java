@@ -177,7 +177,7 @@ import timber.log.Timber;
                         long end = MietUtils.getCurrentSemesterEndTime();
                         List<Lesson> schedule = ScheduleHelper.buildSchedule(scheduleItems, begin, end);
                         repository.saveSchedule(schedule, group);
-                        return ScheduleHelper.buildDailySchedule(schedule, System.currentTimeMillis(), end, SEPARATOR);
+                        return ScheduleHelper.buildDailySchedule(schedule, today.getTimeInMillis(), end, SEPARATOR);
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread());
@@ -343,7 +343,7 @@ import timber.log.Timber;
         switch (state) {
             case SHOWING_SCHEDULE:
                 String group = preferences.getGroupToShowScheduleFor();
-                retrieveSchedule(group, System.currentTimeMillis())
+                retrieveSchedule(group, today.getTimeInMillis())
                         .subscribe(new ScheduleReceivedSubscriber(group));
                 break;
             case LOADING_GROUPS:
