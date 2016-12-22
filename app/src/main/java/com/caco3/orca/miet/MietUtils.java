@@ -6,11 +6,14 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Contains some useful constants and methods which help to work with dates
  */
 public class MietUtils {
+
+    private static final long MILLIS_PER_WEEK = TimeUnit.DAYS.toMillis(7);
     /**
      * Weeks per each semester
      */
@@ -88,8 +91,7 @@ public class MietUtils {
         endOfAutumnSemester.add(Calendar.WEEK_OF_YEAR, WEEKS_PER_SEMESTER);
         endOfAutumnSemester.set(Calendar.HOUR_OF_DAY, 24);
         Calendar newYear = Calendar.getInstance();
-        newYear.set(Calendar.MONTH, Calendar.DECEMBER);
-        newYear.set(Calendar.DAY_OF_MONTH, 31);
+        newYear.set(newYear.get(Calendar.YEAR), Calendar.DECEMBER, 31, 24, 59);
         if (endOfAutumnSemester.compareTo(newYear) > 0) {
             endOfAutumnSemester.setTimeInMillis(newYear.getTimeInMillis());
         }
@@ -142,11 +144,11 @@ public class MietUtils {
      */
     public static int getWeekOfSemester(Calendar calendar){
         if (belongsToAutumnSemester(calendar)) {
-            return calendar.get(Calendar.WEEK_OF_YEAR)
-                    - startOfAutumnSemester.get(Calendar.WEEK_OF_YEAR) + 1;
+            long millisDiff = calendar.getTimeInMillis() - startOfAutumnSemester.getTimeInMillis();
+            return (int)(millisDiff / MILLIS_PER_WEEK + 1);
         } else if (belongsToSpringSemester(calendar)) {
-            return calendar.get(Calendar.WEEK_OF_YEAR)
-                    - startOfSpringSemester.get(Calendar.WEEK_OF_YEAR) + 1;
+            long millisDiff = calendar.getTimeInMillis() - startOfSpringSemester.getTimeInMillis();
+            return (int)(millisDiff / MILLIS_PER_WEEK + 1);
         }
 
         return -1;
