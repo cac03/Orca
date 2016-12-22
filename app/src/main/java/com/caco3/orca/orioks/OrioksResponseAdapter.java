@@ -39,9 +39,12 @@ import java.util.Map;
                 .at(controlEventJson.week)
                 .bonus(!(controlEventJson.bonus instanceof String))
                 .maxAvailablePoints(controlEventJson.maxPoints)
-                .achievedPoints(controlEventJson.markJson.achievedPoints)
+                .achievedPoints((controlEventJson.markJson.achievedPoints instanceof Number
+                        ? (float)((double)(controlEventJson.markJson.achievedPoints)) : -1.0f))
                 .minPoints(controlEventJson.minPoints)
-                .entered(!(Float.compare(controlEventJson.markJson.achievedPoints, 0.0f) == 0 && controlEventJson.markJson.enteredBy.contains("методи")))
+                .attended(!(controlEventJson.markJson.achievedPoints instanceof String))
+                .entered(!(Float.compare(controlEventJson.markJson.achievedPoints instanceof Number
+                        ? (float)((double)controlEventJson.markJson.achievedPoints) : 1.0f, 0.0f) == 0 && controlEventJson.markJson.enteredBy.contains("методи")))
                 .build();
     }
 

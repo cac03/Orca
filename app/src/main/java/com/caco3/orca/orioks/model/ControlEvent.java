@@ -45,6 +45,11 @@ public class ControlEvent implements Serializable {
     private final String topic;
 
     /**
+     * True if the user has attended to this control event
+     */
+    private final boolean attended;
+
+    /**
      * True if user has seen new entered points for this control event.
      * False, otherwise.
      *
@@ -71,7 +76,7 @@ public class ControlEvent implements Serializable {
 
     private static final long serialVersionUID = -85465588452256L;
 
-    private ControlEvent(float achievedPoints, float maxAvailablePoints, Teacher enteredBy, int week, String typeName, String topic, boolean hasSeenNewEnteredPoints, boolean isEntered, boolean isBonus, float minPoints) {
+    private ControlEvent(float achievedPoints, float maxAvailablePoints, Teacher enteredBy, int week, String typeName, String topic, boolean hasSeenNewEnteredPoints, boolean isEntered, boolean isBonus, float minPoints, boolean attended) {
         this.achievedPoints = achievedPoints;
         this.maxAvailablePoints = maxAvailablePoints;
         this.enteredBy = enteredBy;
@@ -82,6 +87,7 @@ public class ControlEvent implements Serializable {
         this.isEntered = isEntered;
         this.isBonus = isBonus;
         this.minPoints = minPoints;
+        this.attended = attended;
     }
 
     private ControlEvent(Builder builder) {
@@ -94,7 +100,8 @@ public class ControlEvent implements Serializable {
                 builder.hasSeenNewEnteredPoints,
                 builder.entered,
                 builder.bonus,
-                builder.minPoints);
+                builder.minPoints,
+                builder.attended);
 
     }
 
@@ -150,6 +157,10 @@ public class ControlEvent implements Serializable {
         return minPoints;
     }
 
+    public boolean isAttended(){
+        return attended;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -167,6 +178,7 @@ public class ControlEvent implements Serializable {
             return false;
         if (that.isBonus != this.isBonus) return false;
         if (Float.compare(minPoints, that.minPoints) != 0) return false;
+        if (this.attended != that.attended) return false;
         return topic != null ? topic.equals(that.topic) : that.topic == null;
 
     }
@@ -182,6 +194,7 @@ public class ControlEvent implements Serializable {
         result = 31 * result + (hasSeenNewEnteredPoints ? 1 : 0);
         result = 31 * result + (minPoints != +0.0f ? Float.floatToIntBits(minPoints) : 0);
         result = 31 * result + (isBonus ? 1 : 0);
+        result = 31 * result + (attended ? 1 : 0);
         return result;
     }
 
@@ -200,6 +213,7 @@ public class ControlEvent implements Serializable {
         private boolean entered;
         private boolean bonus;
         private float minPoints;
+        private boolean attended;
 
         public Builder achievedPoints(float achievedPoints) {
             this.achievedPoints = achievedPoints;
@@ -250,6 +264,11 @@ public class ControlEvent implements Serializable {
 
         public Builder minPoints(float minPoints) {
             this.minPoints = minPoints;
+            return this;
+        }
+
+        public Builder attended(boolean attended) {
+            this.attended = attended;
             return this;
         }
 

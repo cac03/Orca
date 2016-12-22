@@ -47,4 +47,5 @@
     <!-- Strings related to discipline details activity -->
     <string name="control_event_points_range_str_fmt">%1$s - %2$s</string>
     <string name="control_event_week_type_str_fmt">%1$d. %2$s</string>
+    <string name="control_event_not_attended">N/A</string>
 </resources>

@@ -136,7 +136,10 @@ import butterknife.ButterKnife;
 
             int pointsBgColorId;
             String achievedPointsText;
-            if (!controlEvent.isEntered()) {
+            if (!controlEvent.isAttended()) {
+                pointsBgColorId = R.color.red;
+                achievedPointsText = context.getString(R.string.control_event_not_attended);
+            } else if (!controlEvent.isEntered()) {
                 // no points achieved
                 pointsBgColorId = android.R.color.darker_gray;
                 achievedPointsText = context.getString(R.string.points_not_entered_value);
