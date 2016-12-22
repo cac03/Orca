@@ -71,8 +71,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.setContentView(layoutResID);
         ButterKnife.bind(this);
 
-        setupToolbar();
         setupNavDrawer();
+        setupToolbar();
     }
 
 
