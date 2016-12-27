@@ -8,7 +8,6 @@ import android.support.v7.app.NotificationCompat;
 import com.caco3.orca.R;
 import com.caco3.orca.orioks.model.ControlEvent;
 import com.caco3.orca.orioks.model.Discipline;
-import com.caco3.orca.orioks.model.OrioksResponse;
 import com.caco3.orca.util.Preconditions;
 
 import java.util.ArrayList;
@@ -24,30 +23,30 @@ public class PointsChangedNotificationsMaker implements NotificationsMaker {
     private static final int SMALL_ICON_ID = R.drawable.ic_orca_logo;
 
     private final Context context;
-    private final OrioksResponse oldResponse;
-    private final OrioksResponse newResponse;
+    private final List<Discipline> oldList;
+    private final List<Discipline> newList;
 
     /**
      * @param context any
-     * @param oldResponse to compare
-     * @param newResponse to compare
+     * @param oldList of disciplines to compare
+     * @param newList of disciplines to compare
      *
      * @throws NullPointerException if <code>context == null ||
      * oldResponse == null || newResponse == null</code>
      */
     public PointsChangedNotificationsMaker(Context context,
-                                           OrioksResponse oldResponse,
-                                           OrioksResponse newResponse) {
+                                           List<Discipline> oldList,
+                                           List<Discipline> newList) {
         this.context = Preconditions.checkNotNull(context, "context == null");
-        this.oldResponse = Preconditions.checkNotNull(oldResponse, "oldResponse == null");
-        this.newResponse = Preconditions.checkNotNull(newResponse, "newResponse == null");
+        this.oldList = Preconditions.checkNotNull(oldList, "oldResponse == null");
+        this.newList = Preconditions.checkNotNull(newList, "newResponse == null");
     }
 
     @Override
     public List<Notification> makeNotifications() {
         List<Notification> notifications = new ArrayList<>();
-        for(Discipline oldDiscipline : oldResponse.getDisciplines()) {
-            for(Discipline newDiscipline : newResponse.getDisciplines()) {
+        for(Discipline oldDiscipline : oldList) {
+            for(Discipline newDiscipline : newList) {
                 if (oldDiscipline.getName().equals(newDiscipline.getName())) {
                     for(ControlEvent oldEvent : oldDiscipline.getAttachedControlEvents()) {
                         for (ControlEvent newEvent : newDiscipline.getAttachedControlEvents()) {
