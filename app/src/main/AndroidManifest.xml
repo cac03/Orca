@@ -33,6 +33,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".learning.LearningActivity" />
         </activity>
+
+        <service android:name=".orioksautoupdate.OrioksAutoUpdateService" />
+        <receiver android:name=".orioksautoupdate.OrioksAutoUpdateAlarmReceiver" />
     </application>
 
 </manifest>
