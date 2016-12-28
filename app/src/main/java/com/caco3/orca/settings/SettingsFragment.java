@@ -35,12 +35,11 @@ public class SettingsFragment extends PreferenceFragment
     }
 
     private void injectFields(){
-        DaggerSettingsComponent
-                .builder()
-                .applicationComponent(OrcaApp.get(getActivity()).getApplicationComponent())
-                .settingsModule(new SettingsModule())
-                .build()
-                .inject(this);
+        if (sharedPreferencesChangedListener == null) {
+            OrcaApp.get(getActivity())
+                    .getSettingsComponent()
+                    .inject(this);
+        }
     }
 
     @Override

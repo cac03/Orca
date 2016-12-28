@@ -81,10 +81,8 @@ public class DisciplineDetailsFragment extends Fragment
         super.onViewCreated(view, savedInstanceState);
 
         if (presenter == null) {
-            DaggerDisciplineDetailsComponent
-                    .builder()
-                    .applicationComponent(OrcaApp.get(getContext()).getApplicationComponent())
-                    .build()
+            OrcaApp.get(getContext())
+                    .getDisciplineDetailsComponent()
                     .inject(this);
         }
         presenter.onViewAttached(this);

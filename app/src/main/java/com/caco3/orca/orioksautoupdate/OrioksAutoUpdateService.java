@@ -58,10 +58,8 @@ public class OrioksAutoUpdateService extends IntentService {
     }
 
     private void injectFields(){
-        DaggerOrioksAutoUpdateComponent
-                .builder()
-                .applicationComponent(OrcaApp.get(this).getApplicationComponent())
-                .build()
+        OrcaApp.get(this)
+                .getOrioksAutoUpdateComponent()
                 .inject(this);
     }
 

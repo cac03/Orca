@@ -9,6 +9,6 @@ import dagger.Component;
  */
 @ScheduleScope
 @Component(modules = ScheduleModule.class, dependencies = ApplicationComponent.class)
-/*package*/ interface ScheduleComponent {
+public interface ScheduleComponent {
     void inject(ScheduleFragment fragment);
 }

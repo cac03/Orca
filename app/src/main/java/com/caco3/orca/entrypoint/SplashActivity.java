@@ -28,11 +28,11 @@ public class SplashActivity extends BaseActivity implements EntryPointActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        DaggerEntryPointComponent
-                .builder()
-                .applicationComponent(OrcaApp.get(this).getApplicationComponent())
-                .build()
-                .inject(this);
+        if (entryPointManager == null) {
+            OrcaApp.get(this)
+                    .getEntryPointComponent()
+                    .inject(this);
+        }
 
         entryPointManager.doWork(this);
     }

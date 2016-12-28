@@ -6,7 +6,7 @@ import dagger.Component;
 
 @LearningScope
 @Component(dependencies = ApplicationComponent.class)
-/*package*/ interface LearningComponent {
+public interface LearningComponent {
 
     void inject(LearningFragment fragment);
 }

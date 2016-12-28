@@ -10,7 +10,7 @@ import dagger.Component;
  */
 @LoginScope
 @Component(dependencies = ApplicationComponent.class)
-/*package*/ interface LoginComponent {
+public interface LoginComponent {
 
     void inject(LoginFragment fragment);
 }

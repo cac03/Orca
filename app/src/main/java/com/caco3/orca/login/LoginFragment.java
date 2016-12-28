@@ -88,10 +88,11 @@ public class LoginFragment extends Fragment implements LoginView {
         super.onViewCreated(view, savedInstanceState);
 
 
-        DaggerLoginComponent.builder()
-                .applicationComponent(OrcaApp.get(getContext()).getApplicationComponent())
-                .build()
-                .inject(this);
+        if (presenter == null) {
+            OrcaApp.get(getContext())
+                    .getLoginComponent()
+                    .inject(this);
+        }
 
         presenter.onViewAttached(this);
     }

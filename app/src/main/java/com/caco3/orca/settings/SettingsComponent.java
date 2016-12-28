@@ -7,7 +7,7 @@ import dagger.Component;
 
 @SettingsScope
 @Component(dependencies = ApplicationComponent.class, modules = SettingsModule.class)
-/*package*/ interface SettingsComponent {
+public interface SettingsComponent {
 
     void inject(SettingsFragment fragment);
 }

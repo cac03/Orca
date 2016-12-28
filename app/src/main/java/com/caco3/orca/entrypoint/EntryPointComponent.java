@@ -6,7 +6,7 @@ import dagger.Component;
 
 @EntryPointScope
 @Component(dependencies = ApplicationComponent.class)
-/*package*/ interface EntryPointComponent {
+public interface EntryPointComponent {
 
     void inject(SplashActivity splashActivity);
 }

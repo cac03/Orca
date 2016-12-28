@@ -88,9 +88,8 @@ public class LearningFragment extends Fragment
     public void onViewCreated(View view,
                               @Nullable Bundle savedInstanceState) {
         if (presenter == null) {
-            DaggerLearningComponent.builder()
-                    .applicationComponent(OrcaApp.get(getContext()).getApplicationComponent())
-                    .build()
+            OrcaApp.get(getContext())
+                    .getLearningComponent()
                     .inject(this);
         }
 

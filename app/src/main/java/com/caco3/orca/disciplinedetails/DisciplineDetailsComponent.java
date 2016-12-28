@@ -7,7 +7,7 @@ import dagger.Component;
 
 @DisciplineDetailsScope
 @Component(dependencies = ApplicationComponent.class)
-/*package*/ interface DisciplineDetailsComponent {
+public interface DisciplineDetailsComponent {
 
     void inject(DisciplineDetailsFragment fragment);
 }

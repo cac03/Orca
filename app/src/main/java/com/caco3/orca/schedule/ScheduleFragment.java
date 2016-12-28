@@ -201,11 +201,8 @@ public class ScheduleFragment extends Fragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (presenter == null) {
-            DaggerScheduleComponent
-                    .builder()
-                    .applicationComponent(OrcaApp.get(getContext()).getApplicationComponent())
-                    .scheduleModule(new ScheduleModule())
-                    .build()
+            OrcaApp.get(getContext())
+                    .getScheduleComponent()
                     .inject(this);
         }
         presenter.onViewAttached(this);
