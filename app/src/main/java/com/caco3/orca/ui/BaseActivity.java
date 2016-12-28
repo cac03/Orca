@@ -3,6 +3,7 @@ package com.caco3.orca.ui;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
@@ -26,6 +27,7 @@ import com.caco3.orca.header.HeaderView;
 import com.caco3.orca.learning.LearningActivity;
 import com.caco3.orca.orioks.model.Student;
 import com.caco3.orca.schedule.ScheduleActivity;
+import com.caco3.orca.settings.SettingsActivity;
 
 import javax.inject.Inject;
 
@@ -68,6 +70,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     public void setContentView(@LayoutRes int layoutResID) {
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
         super.setContentView(layoutResID);
         ButterKnife.bind(this);
 
@@ -157,6 +161,9 @@ public abstract class BaseActivity extends AppCompatActivity {
                             case R.id.nav_schedule:
                                 startActivity(new Intent(BaseActivity.this, ScheduleActivity.class));
                                 finish();
+                                break;
+                            case R.id.nav_settings:
+                                startActivity(new Intent(BaseActivity.this, SettingsActivity.class));
                                 break;
                         }
                     }

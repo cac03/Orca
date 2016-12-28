@@ -11,6 +11,11 @@
             android:id="@+id/nav_schedule"
             android:title="@string/nav_schedule_title"
             android:icon="@drawable/ic_schedule_icon"/>
+
+        <item
+            android:id="@+id/nav_settings"
+            android:title="@string/nav_settings_title"
+            android:icon="@drawable/ic_settings"/>
     </group>
 
 </menu>
