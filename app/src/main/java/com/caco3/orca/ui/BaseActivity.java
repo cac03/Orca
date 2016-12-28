@@ -172,8 +172,8 @@ public abstract class BaseActivity extends AppCompatActivity {
                         drawerLayout.closeDrawers();
                     }
 
-
-                    return true;
+                    // don't check selected item
+                    return false;
                 }
             });
             // if no parent activity, show hamburger icon in toolbar
