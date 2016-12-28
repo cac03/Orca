@@ -16,6 +16,7 @@ import com.caco3.orca.header.HeaderComponent;
 import com.caco3.orca.header.HeaderModule;
 import com.caco3.orca.learning.DaggerLearningComponent;
 import com.caco3.orca.learning.LearningComponent;
+import com.caco3.orca.learning.LearningModule;
 import com.caco3.orca.learning.preferences.LearningPreferencesModule;
 import com.caco3.orca.login.DaggerLoginComponent;
 import com.caco3.orca.login.LoginComponent;
@@ -124,6 +125,7 @@ public class OrcaApp extends Application {
         return DaggerLearningComponent
                 .builder()
                 .applicationComponent(applicationComponent)
+                .learningModule(new LearningModule())
                 .build();
     }
 

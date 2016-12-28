@@ -59,7 +59,7 @@ public class LearningFragment extends Fragment
     private DisciplinesAdapter adapter;
 
     @Inject
-    LearningPresenterImpl presenter;
+    LearningPresenter presenter;
 
     @Nullable
     @Override
