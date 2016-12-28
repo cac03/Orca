@@ -104,6 +104,15 @@ public class MietUtils {
         endOfSpringSemester = (Calendar) startOfSpringSemester.clone();
         endOfSpringSemester.add(Calendar.WEEK_OF_YEAR, WEEKS_PER_SEMESTER);
         endOfSpringSemester.set(Calendar.HOUR_OF_DAY, 24);
+
+        floorToFirstDayOfWeek(startOfAutumnSemester);
+        floorToFirstDayOfWeek(endOfAutumnSemester);
+        floorToFirstDayOfWeek(startOfSpringSemester);
+        floorToFirstDayOfWeek(endOfSpringSemester);
+    }
+
+    private static void floorToFirstDayOfWeek(Calendar calendar) {
+        calendar.add(Calendar.DAY_OF_YEAR, -calendar.get(Calendar.DAY_OF_WEEK) + calendar.getFirstDayOfWeek());
     }
 
     /**
