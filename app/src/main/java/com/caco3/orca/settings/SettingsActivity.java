@@ -2,6 +2,7 @@ package com.caco3.orca.settings;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import com.caco3.orca.R;
 import com.caco3.orca.ui.BaseActivity;
@@ -32,5 +33,21 @@ public class SettingsActivity extends BaseActivity {
     @Override
     protected int getNavDrawerItemId() {
         return R.id.nav_settings;
+    }
+
+    @Override
+    protected boolean hasParentActivity() {
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
