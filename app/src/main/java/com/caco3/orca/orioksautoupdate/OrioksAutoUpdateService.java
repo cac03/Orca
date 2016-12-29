@@ -15,6 +15,7 @@ import com.caco3.orca.orioks.OrioksException;
 import com.caco3.orca.orioks.UserCredentials;
 import com.caco3.orca.orioks.model.Discipline;
 import com.caco3.orca.orioks.model.OrioksResponse;
+import com.caco3.orca.util.FileLog;
 import com.caco3.orca.util.Preconditions;
 
 import java.io.IOException;
@@ -39,6 +40,8 @@ public class OrioksAutoUpdateService extends IntentService {
     @Inject
     CredentialsManager credentialsManager;
 
+    private final FileLog fileLog = new FileLog(this, OrioksAutoUpdateService.class.getSimpleName());
+
     public OrioksAutoUpdateService(){
         super("OrioksAutoUpdateService");
     }
@@ -46,6 +49,7 @@ public class OrioksAutoUpdateService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         Timber.i("Running");
+        fileLog.log("Running");
         injectFields();
 
         final UserCredentials credentials = credentialsManager.getActive();
@@ -54,6 +58,7 @@ public class OrioksAutoUpdateService extends IntentService {
                     .subscribe(new ResponseReceivedSubscriber(credentials));
         } else {
             Timber.w("Attempt to update data. But there is no active credentials");
+            fileLog.log("Attempt to update data. But there is no active credentials");
         }
     }
 
@@ -78,9 +83,12 @@ public class OrioksAutoUpdateService extends IntentService {
         @Override
         public void onError(Throwable e) {
             Timber.e(e, "An error occurred while receiving OrioksResponse");
+            fileLog.log("An error occurred while receiving OrioksResponse", e);
             if (e instanceof OrioksException) {
+                fileLog.log(String.format("Orioks returned error: %s", ((OrioksException)e).getOrioksErrorMessage()));
                 Timber.e("Orioks returned error: %s", ((OrioksException)e).getOrioksErrorMessage());
             } else if (e instanceof IOException) {
+                fileLog.log("No network?");
                 Timber.e("No network?");
             } else {
                 throw Exceptions.propagate(e);
@@ -90,6 +98,7 @@ public class OrioksAutoUpdateService extends IntentService {
         @Override
         public void onNext(OrioksResponse response) {
             Timber.i("Successfully received response");
+            fileLog.log("Successfully received response");
 
             List<Notification> notifications = getNotifications(response);
             fireNotifications(notifications);
